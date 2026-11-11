@@ -1,0 +1,25 @@
+{
+  "name": "hackearth-registration",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WIE HackEarth 2.0 2026 - paid team registration with Razorpay, themed RSVP QR and email",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "preview-qr": "node scripts/preview-qr.js",
+    "generate-emails": "node scripts/generate-sample-emails.js",
+    "import-shortlist": "node scripts/import-shortlist.js",
+    "test:db": "node scripts/test-supabase.js"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.65",
+    "@supabase/supabase-js": "^2.45.0",
+    "nodemailer": "^6.9.15",
+    "pdfkit": "^0.20.2",
+    "qrcode": "^1.5.4",
+    "razorpay": "^2.9.5"
+  }
+}

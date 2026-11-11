@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Team registration · WIE HackEarth 2.0 · 2026</title>
+<meta name="description" content="Pay the team registration fee for the WIE HackEarth 2.0 offline final and get your RSVP QR.">
+<meta name="theme-color" content="#fcf7eb">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top">
+  <p class="orgs">IEEE Women in Engineering · IEEE Galgotias University Student Branch · IEEE Computational Intelligence Society</p>
+</header>
+
+<section class="hero">
+  <h1><span class="wie">WIE</span> HackEarth
+    <svg class="leaf" viewBox="0 0 80 90" aria-hidden="true"><path d="M8 82C6 40 28 12 74 4 70 46 46 76 8 82Z" fill="#1f7a3a"/><path d="M8 82C26 56 44 34 66 14" stroke="#fcf7eb" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>
+  </h1>
+  <p class="hero-sub"><span class="pill">2.0 · 2026</span> Final-round team registration</p>
+  <dl class="facts" id="facts" aria-label="Event details">
+    <div><dt>Offline final</dt><dd id="f-dates">29–30 Nov 2026</dd></div>
+    <div><dt>Venue</dt><dd id="f-venue">Galgotias University, Greater Noida</dd></div>
+    <div><dt>Team fee</dt><dd id="f-fee">₹400 <span class="wie-tag">(₹200 for all-female)</span></dd></div>
+  </dl>
+</section>
+
+<main class="layout">
+  <form id="form" class="card" novalidate autocomplete="on">
+    <h2>Your team</h2>
+    <div class="grid2">
+      <div class="field">
+        <label for="teamName">Team name</label>
+        <input id="teamName" name="teamName" maxlength="40" required autocomplete="off">
+        <p class="hint">Printed on your RSVP QR, so spell it the way you want it shown.</p>
+        <p class="err" data-err="teamName" role="alert"></p>
+      </div>
+      <div class="field">
+        <label for="unstopTeamId">Unstop team ID <span class="opt">optional</span></label>
+        <input id="unstopTeamId" name="unstopTeamId" maxlength="60" autocomplete="off">
+        <p class="err" data-err="unstopTeamId" role="alert"></p>
+      </div>
+      <div class="field">
+        <label for="college">College or university</label>
+        <input id="college" name="college" maxlength="120" required autocomplete="organization">
+        <p class="err" data-err="college" role="alert"></p>
+      </div>
+      <div class="field">
+        <label for="city">City <span class="opt">optional</span></label>
+        <input id="city" name="city" maxlength="60" autocomplete="address-level2">
+      </div>
+    </div>
+
+    <h2>Members</h2>
+    <fieldset class="size">
+      <legend>How many people are in your team?</legend>
+      <div class="seg" id="size"></div>
+    </fieldset>
+    <p class="err" data-err="members" role="alert"></p>
+    <div id="members"></div>
+
+    <div class="discount-banner" id="discountBanner" hidden>
+      <span class="discount-icon">🎉</span>
+      <div>
+        <strong>All-Women Team Discount Applied!</strong>
+        <p>All members are female. You qualify for the special IEEE WIE discount — registration fee is reduced to <b>₹200</b>.</p>
+      </div>
+    </div>
+
+    <h2>Verification &amp; Safety</h2>
+    <div class="safety-box">
+      <h3>🛡️ Campus Safety &amp; Emergency Contact (Parent / Guardian)</h3>
+      <p>Standard safety practice for overnight campus events. In case of emergency or if a team member is unreachable during the hackathon, who should the organizers contact?</p>
+      <div class="grid2">
+        <div class="field">
+          <label for="emergencyName">Parent / Guardian full name</label>
+          <input id="emergencyName" name="emergencyName" maxlength="80" required autocomplete="off">
+          <p class="err" data-err="emergencyName" role="alert"></p>
+        </div>
+        <div class="field">
+          <label for="emergencyRelation">Relation to student</label>
+          <select id="emergencyRelation" name="emergencyRelation">
+            <option value="Parent">Parent (Father / Mother)</option>
+            <option value="Guardian">Local Guardian</option>
+            <option value="Faculty">Faculty Advisor / Mentor</option>
+          </select>
+          <p class="err" data-err="emergencyRelation" role="alert"></p>
+        </div>
+        <div class="field full-col">
+          <label for="emergencyPhone">Emergency contact phone number</label>
+          <input id="emergencyPhone" name="emergencyPhone" type="tel" inputmode="numeric" maxlength="16" required autocomplete="tel">
+          <p class="hint">Must be reachable during event days &amp; nights (29–30 Nov). Cannot be a participant's own number.</p>
+          <p class="err" data-err="emergencyPhone" role="alert"></p>
+        </div>
+      </div>
+    </div>
+
+    <h2>Stay &amp; Shuttle Accommodation <span class="opt">optional</span></h2>
+    <div class="stay-box">
+      <div class="stay-info-grid">
+        <div class="stay-info-col">
+          <div class="stay-icon-title">
+            <span class="stay-icon">🛏️</span>
+            <h3>Stay &amp; Accommodation</h3>
+          </div>
+          <p class="stay-desc">Teams coming from outside Delhi can be provided accommodation at a designated venue (details to be announced soon).</p>
+          <div class="stay-price-pill">
+            <b>Up to ₹<span class="stay-rate-inline">1,500</span></b>
+            <span>per person stay charges, paid by the team</span>
+          </div>
+        </div>
+        <div class="stay-info-col">
+          <div class="stay-icon-title">
+            <span class="stay-icon">🚌</span>
+            <h3>Shuttle to the Venue</h3>
+          </div>
+          <p class="stay-desc">Transport is arranged by Galgotias University: pick-up from the accommodation venue to the campus and drop back, so there's no commute for you to plan.</p>
+        </div>
+      </div>
+
+      <div class="stay-selector-box">
+        <label class="stay-choice">
+          <input type="radio" name="needStay" value="no" checked>
+          <span><b>No accommodation needed</b> (Local / Day-scholar / Arranging own stay)</span>
+        </label>
+        <label class="stay-choice">
+          <input type="radio" name="needStay" value="yes">
+          <span><b>Yes, book stay &amp; university shuttle</b> (₹<span class="stay-rate-inline">1,500</span> per person)</span>
+        </label>
+      </div>
+
+      <div id="stayCountWrapper" class="stay-count-wrapper" hidden>
+        <label for="stayCount">How many members need accommodation?</label>
+        <select id="stayCount" name="stayCount"></select>
+        <p class="stay-subtotal" id="staySubtotal"></p>
+      </div>
+    </div>
+
+    <h2>Track</h2>
+    <fieldset class="tracks" id="tracks">
+      <legend class="sr">Choose your track</legend>
+    </fieldset>
+    <p class="err" data-err="track" role="alert"></p>
+    <div class="field">
+      <label for="ideaTitle">Project or idea title <span class="opt">optional</span></label>
+      <input id="ideaTitle" name="ideaTitle" maxlength="120" autocomplete="off">
+    </div>
+
+    <label class="consent">
+      <input type="checkbox" id="consent">
+      <span>The details above are correct, and my team meets the eligibility rules published on Unstop. I agree to the <a href="/terms.html" data-policy="terms">Terms &amp; Conditions</a> and understand that the ₹<span class="fee-inline">400</span> total amount (including registration and any booked accommodation charges) is <a href="/refunds.html" data-policy="refunds">non-refundable</a> once paid.</span>
+    </label>
+    <p class="err" data-err="consent" role="alert"></p>
+
+    <p class="err form-err" id="formErr" role="alert"></p>
+    <button type="submit" class="pay" id="pay">Pay ₹<span class="fee-inline">400</span> and register</button>
+    <p class="secure">Payments are handled by Razorpay (UPI, cards, net banking, wallets). We never see your card details.</p>
+  </form>
+
+  <aside class="side">
+    <div class="card note wie-card">
+      <h3>🎉 All-Women Team Discount</h3>
+      <p style="margin: 0 0 8px; font-size: 14px;">Teams where all members are female pay only <b>₹200</b> (₹200 off standard ₹400 fee).</p>
+      <ul>
+        <li>Select <b>Female</b> for each member.</li>
+        <li>Names and emails are verified for female eligibility.</li>
+        <li>Discount applies automatically!</li>
+      </ul>
+    </div>
+    <div class="card note">
+      <h3>What happens after you pay</h3>
+      <ul>
+        <li>Your RSVP QR appears on this page right away.</li>
+        <li>The same QR is emailed to every member you list.</li>
+        <li>Show it at the entry desk on the day. One QR covers the whole team.</li>
+      </ul>
+    </div>
+    <div class="card note">
+      <h3>Before you start</h3>
+      <ul>
+        <li>The team leader’s email must match the one used on Unstop for Round 1.</li>
+        <li>Check every email address. Confirmation goes only to the addresses you enter.</li>
+        <li>Paid but no email? Check spam, then write to <a href="mailto:ieeegusb@galgotiasuniversity.edu.in">ieeegusb@galgotiasuniversity.edu.in</a>.</li>
+      </ul>
+    </div>
+  </aside>
+</main>
+
+<section id="done" class="done card" hidden aria-live="polite">
+  <h2>You’re registered</h2>
+  <p id="doneMsg"></p>
+  <img id="qrImg" alt="Your team’s RSVP QR code" width="360">
+  <div style="margin:16px 0 6px;">
+    <span style="background:var(--indigo);color:#fff;padding:6px 18px;border-radius:20px;font-size:16px;font-weight:700;display:inline-block;letter-spacing:0.5px">TEAM #<span id="doneTeamId">001</span></span>
+  </div>
+  <p class="code">Registration ID <b id="doneCode"></b></p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:18px 0;">
+    <a class="pay dl" id="dl" download style="margin:0">📥 Download RSVP Pass (PNG)</a>
+    <a class="pay dl" id="dlPdf" download style="margin:0;background:var(--indigo)" hidden>🧾 Download Official Invoice (PDF)</a>
+  </div>
+
+  <div class="done-actions">
+    <a class="action-btn wa-btn" id="btnWa" target="_blank" rel="noopener" href="https://chat.whatsapp.com/invite/wie-hackearth-2026">
+      💬 Join Official WhatsApp Community
+    </a>
+    <a class="action-btn cal-btn" id="btnCal" target="_blank" rel="noopener">
+      📅 Add 29–30 Nov to Google Calendar
+    </a>
+    <a class="action-btn map-btn" target="_blank" rel="noopener" href="https://maps.google.com/?q=Galgotias+University+Greater+Noida">
+      📍 Campus Map &amp; Directions
+    </a>
+  </div>
+
+  <p class="secure" id="doneEmail"></p>
+</section>
+
+<footer class="foot">
+  <nav class="foot-links" aria-label="Policies and support">
+    <a href="/terms.html" data-policy="terms">Terms &amp; Conditions</a>
+    <span aria-hidden="true">·</span>
+    <a href="/privacy.html" data-policy="privacy">Privacy Policy</a>
+    <span aria-hidden="true">·</span>
+    <a href="/refunds.html" data-policy="refunds">Refund &amp; Cancellation</a>
+    <span aria-hidden="true">·</span>
+    <a href="/contact.html" data-policy="contact">Contact Us</a>
+  </nav>
+  <p class="foot-copy">IEEE WIE Affinity Group · Galgotias University · Plot No. 2, Yamuna Expressway, Sector 17A, Greater Noida, Uttar Pradesh 203201</p>
+</footer>
+
+<dialog id="policyModal" class="policy-dialog">
+  <div class="policy-modal-box">
+    <div class="policy-modal-head">
+      <h2 id="policyTitle" class="policy-title">Policy</h2>
+      <button type="button" class="policy-close" id="policyClose" aria-label="Close dialog">&times;</button>
+    </div>
+    <div id="policyBody" class="policy-modal-body"></div>
+  </div>
+</dialog>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

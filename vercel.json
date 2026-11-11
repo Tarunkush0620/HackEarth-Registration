@@ -1,0 +1,16 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/scanner", "destination": "/scanner.html" },
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/privacy", "destination": "/privacy.html" },
+    { "source": "/refunds", "destination": "/refunds.html" },
+    { "source": "/contact", "destination": "/contact.html" }
+  ],
+  "functions": {
+    "api/**/*.js": {
+      "includeFiles": "assets/**",
+      "maxDuration": 30
+    }
+  }
+}
