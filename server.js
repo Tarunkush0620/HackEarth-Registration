@@ -116,16 +116,24 @@ const server = http.createServer(async (req, res) => {
         const orderId = 'order_mock_' + Date.now();
 
         let nextNum = 1;
+        let dbChecked = false;
         if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
           try {
             const db = getDb();
-            const { data: latestRows } = await db.from('registrations').select('team_number').order('team_number', { ascending: false }).limit(1);
-            if (latestRows && latestRows.length && latestRows[0].team_number) {
-              nextNum = latestRows[0].team_number + 1;
+            const { data: latestRows, error } = await db.from('registrations').select('team_number').order('team_number', { ascending: false }).limit(1);
+            if (!error && Array.isArray(latestRows)) {
+              dbChecked = true;
+              if (latestRows.length && latestRows[0].team_number) {
+                nextNum = latestRows[0].team_number + 1;
+              } else {
+                nextNum = 1;
+              }
             }
-          } catch {}
+          } catch (e) {
+            console.warn('[DEV MOCK] Supabase latestRows check failed:', e.message);
+          }
         }
-        if (nextNum === 1) {
+        if (!dbChecked) {
           const existingNums = [...mockStore.values()].map((r) => r.team_number || (r.team_id ? parseInt(r.team_id, 10) : 0)).filter(n => !isNaN(n) && n > 0);
           nextNum = existingNums.length ? Math.max(...existingNums) + 1 : 1;
         }
