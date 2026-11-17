@@ -148,6 +148,22 @@ const server = http.createServer(async (req, res) => {
   if (pathname.startsWith('/api/')) {
     const route = pathname.replace(/^\/api\//, '').replace(/\.js$/, '');
 
+    // Public event config endpoint
+    if (route === 'config') {
+      const cfg = require('./lib/config');
+      return json(res, 200, {
+        eventName: cfg.EVENT_NAME,
+        dates: cfg.EVENT_DATES,
+        venue: cfg.EVENT_VENUE,
+        fee: cfg.FEE_INR,
+        allFemaleFee: cfg.ALL_FEMALE_FEE_INR,
+        accommodationFeePerPerson: cfg.ACCOMMODATION_FEE_PER_PERSON_INR,
+        minMembers: cfg.MIN_MEMBERS,
+        maxMembers: cfg.MAX_MEMBERS,
+        tracks: cfg.TRACKS,
+      });
+    }
+
     // Handle mock payment flows if running in mock/demo mode
     if (mockMode && route === 'create-order' && req.method === 'POST') {
       try {
@@ -623,7 +639,7 @@ const server = http.createServer(async (req, res) => {
     }
 
     // Default Vercel API file handler
-    const apiFilePath = path.join(__dirname, 'api', `${route}.js`);
+    const apiFilePath = path.resolve(__dirname, 'api', `${route}.js`);
     if (fs.existsSync(apiFilePath)) {
       try {
         const handler = require(apiFilePath);

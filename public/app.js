@@ -1,7 +1,25 @@
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
   const form = $('#form');
-  const state = { size: 2, cfg: null };
+
+  const DEFAULT_CFG = {
+    eventName: 'WIE HackEarth 2.0 · 2026',
+    dates: '29–30 Nov 2026',
+    venue: 'Galgotias University, Greater Noida',
+    fee: 400,
+    allFemaleFee: 200,
+    accommodationFeePerPerson: 1500,
+    minMembers: 2,
+    maxMembers: 4,
+    tracks: [
+      { id: 'sustainability-climate', label: 'Sustainability & Climate' },
+      { id: 'ai-social-good', label: 'AI for Social Good' },
+      { id: 'health-wellbeing', label: 'Health & Well-being' },
+      { id: 'smart-communities', label: 'Smart Communities' },
+    ],
+  };
+
+  const state = { size: 2, cfg: DEFAULT_CFG };
 
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -367,18 +385,32 @@
   }
 
   /* ---------- boot ---------- */
-  fetch('/api/config').then((r) => r.json()).then((cfg) => {
+  function applyConfig(cfg) {
     state.cfg = cfg;
-    $('#f-dates').textContent = cfg.dates;
-    $('#f-venue').textContent = cfg.venue;
-    $('#f-fee').innerHTML = `₹${cfg.fee} <span class="wie-tag">(₹${cfg.allFemaleFee || 200} for all-female)</span>`;
+    if ($('#f-dates')) $('#f-dates').textContent = cfg.dates;
+    if ($('#f-venue')) $('#f-venue').textContent = cfg.venue;
+    if ($('#f-fee')) $('#f-fee').innerHTML = `₹${cfg.fee} <span class="wie-tag">(₹${cfg.allFemaleFee || 200} for all-female)</span>`;
     document.querySelectorAll('.fee-inline').forEach((n) => (n.textContent = cfg.fee));
     document.querySelectorAll('.stay-rate-inline').forEach((n) => (n.textContent = (cfg.accommodationFeePerPerson || 1500).toLocaleString('en-IN')));
-    renderSize(); renderMembers(); renderTracks(); renderStayCountOptions();
-
-    document.querySelectorAll('input[name=needStay]').forEach((r) => r.addEventListener('change', updatePricing));
-    const staySel = $('#stayCount');
-    if (staySel) staySel.addEventListener('change', updatePricing);
+    renderSize();
+    renderMembers();
+    renderTracks();
+    renderStayCountOptions();
     updatePricing();
-  }).catch(() => { $('#formErr').textContent = 'Could not load the form. Refresh the page.'; });
+  }
+
+  // Initial immediate render with defaults
+  applyConfig(DEFAULT_CFG);
+
+  document.querySelectorAll('input[name=needStay]').forEach((r) => r.addEventListener('change', updatePricing));
+  const staySel = $('#stayCount');
+  if (staySel) staySel.addEventListener('change', updatePricing);
+
+  // Sync with server if available
+  fetch('/api/config')
+    .then((r) => (r.ok ? r.json() : null))
+    .then((cfg) => {
+      if (cfg && cfg.tracks) applyConfig(cfg);
+    })
+    .catch(() => {});
 })();
