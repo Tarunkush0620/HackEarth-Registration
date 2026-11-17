@@ -274,7 +274,7 @@ const server = http.createServer(async (req, res) => {
         });
       } catch (err) {
         console.error('Mock verify-payment error:', err);
-        return json(res, 500, { error: 'Mock payment verification failed' });
+        return json(res, 500, { error: 'Mock payment verification failed', details: err.message, stack: err.stack });
       }
     }
 
