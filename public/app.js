@@ -41,6 +41,23 @@
     if (first) { first.scrollIntoView({ behavior: 'smooth', block: 'center' }); if (first.focus) first.focus({ preventScroll: true }); }
   }
 
+  form.addEventListener('input', (e) => {
+    const key = e.target.dataset.field || e.target.id || e.target.name;
+    if (key) {
+      const slot = document.querySelector(`[data-err="${key}"]`);
+      if (slot) slot.textContent = '';
+      e.target.removeAttribute('aria-invalid');
+    }
+  });
+  form.addEventListener('change', (e) => {
+    const key = e.target.dataset.field || e.target.id || e.target.name;
+    if (key) {
+      const slot = document.querySelector(`[data-err="${key}"]`);
+      if (slot) slot.textContent = '';
+      e.target.removeAttribute('aria-invalid');
+    }
+  });
+
   /* ---------- members & pricing ---------- */
   function isTeamAllFemale() {
     const selects = [...document.querySelectorAll('[name=mgender]')];
@@ -181,13 +198,33 @@
   }
 
   function renderTracks() {
+    const sel = $('#track');
+    if (sel && sel.tagName === 'SELECT') {
+      const currentVal = sel.value;
+      sel.innerHTML = '<option value="">Select your track...</option>';
+      if (Array.isArray(state.cfg?.tracks)) {
+        state.cfg.tracks.forEach((t) => {
+          const opt = document.createElement('option');
+          opt.value = t.id;
+          opt.textContent = t.label;
+          if (t.id === currentVal) opt.selected = true;
+          sel.appendChild(opt);
+        });
+      }
+      return;
+    }
     const box = $('#tracks');
-    state.cfg.tracks.forEach((t) => {
-      const l = document.createElement('label');
-      l.className = 'tile';
-      l.innerHTML = `<input type="radio" name="track" value="${esc(t.id)}"> ${esc(t.label)}`;
-      box.appendChild(l);
-    });
+    if (box) {
+      box.innerHTML = '';
+      if (Array.isArray(state.cfg?.tracks)) {
+        state.cfg.tracks.forEach((t) => {
+          const l = document.createElement('label');
+          l.className = 'tile';
+          l.innerHTML = `<input type="radio" name="track" value="${esc(t.id)}"> ${esc(t.label)}`;
+          box.appendChild(l);
+        });
+      }
+    }
   }
 
   /* ---------- collect + submit ---------- */
@@ -202,6 +239,9 @@
       rollNumber: (m.querySelector('[name=mroll]') || {}).value || '',
     }));
     const leaderPhone = members[0] ? members[0].phone : '';
+    const trackVal = ($('#track') && $('#track').tagName === 'SELECT')
+      ? $('#track').value
+      : (form.querySelector('[name=track]:checked') || {}).value || ($('#track') || {}).value || '';
 
     return {
       teamName: ($('#teamName') || {}).value || '',
@@ -211,7 +251,7 @@
       needStay: needStay ? 'yes' : 'no',
       stayCount,
       ideaTitle: ($('#ideaTitle') || {}).value || '',
-      track: (form.querySelector('[name=track]:checked') || {}).value || '',
+      track: trackVal,
       leaderPhone,
       emergencyName: ($('#emergencyName') || {}).value || '',
       emergencyRelation: ($('#emergencyRelation') || {}).value || '',
