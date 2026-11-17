@@ -204,6 +204,7 @@ const server = http.createServer(async (req, res) => {
           team_id: teamId,
           reg_code: code,
           team_name: d.teamName,
+          team_name_key: d.teamNameKey || d.teamName.trim().toLowerCase(),
           track: d.track,
           idea_title: d.ideaTitle,
           college: d.college,
