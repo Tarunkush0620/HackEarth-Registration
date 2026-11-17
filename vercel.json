@@ -8,8 +8,12 @@
     { "source": "/contact", "destination": "/contact.html" }
   ],
   "functions": {
+    "server.js": {
+      "includeFiles": "{assets/**,node_modules/pdfkit/js/standard-fonts/**,node_modules/pdfkit/js/data.trie}",
+      "maxDuration": 30
+    },
     "api/**/*.js": {
-      "includeFiles": "assets/**",
+      "includeFiles": "{assets/**,node_modules/pdfkit/js/standard-fonts/**,node_modules/pdfkit/js/data.trie}",
       "maxDuration": 30
     }
   }
