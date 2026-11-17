@@ -33,6 +33,8 @@ const { FEE_INR } = require('./lib/config');
 const regCode = require('./lib/regcode');
 const { buildCard } = require('./lib/qr');
 const { buildInvoicePdf } = require('./lib/invoice');
+const { sendConfirmation } = require('./lib/mailer');
+const getDb = require('./lib/db');
 const { issueToken, requireAuth, requireSuperAdmin, safeEqual } = require('./lib/auth');
 const { brief } = require('./lib/team');
 const { verifyOrganiserPin } = require('./lib/organisers');
@@ -161,6 +163,11 @@ const server = http.createServer(async (req, res) => {
         minMembers: cfg.MIN_MEMBERS,
         maxMembers: cfg.MAX_MEMBERS,
         tracks: cfg.TRACKS,
+        envCheck: {
+          smtp: Boolean(process.env.SMTP_USER && process.env.SMTP_PASS),
+          supabase: Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY),
+          razorpay: Boolean(process.env.RAZORPAY_KEY_ID && !process.env.RAZORPAY_KEY_ID.includes('xxxx')),
+        },
       });
     }
 
@@ -176,11 +183,23 @@ const server = http.createServer(async (req, res) => {
         const amount = d.amountPaise || (feeInr * 100);
         const orderId = 'order_mock_' + Date.now();
 
-        const existingNums = [...mockStore.values()].map((r) => r.team_number || (r.team_id ? parseInt(r.team_id, 10) : 0)).filter(n => !isNaN(n) && n > 0);
-        const nextNum = existingNums.length ? Math.max(...existingNums) + 1 : 1;
+        let nextNum = 1;
+        if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+          try {
+            const db = getDb();
+            const { data: latestRows } = await db.from('registrations').select('team_number').order('team_number', { ascending: false }).limit(1);
+            if (latestRows && latestRows.length && latestRows[0].team_number) {
+              nextNum = latestRows[0].team_number + 1;
+            }
+          } catch {}
+        }
+        if (nextNum === 1) {
+          const existingNums = [...mockStore.values()].map((r) => r.team_number || (r.team_id ? parseInt(r.team_id, 10) : 0)).filter(n => !isNaN(n) && n > 0);
+          nextNum = existingNums.length ? Math.max(...existingNums) + 1 : 1;
+        }
         const teamId = String(nextNum).padStart(3, '0');
 
-        mockStore.set(orderId, {
+        const regData = {
           team_number: nextNum,
           team_id: teamId,
           reg_code: code,
@@ -204,7 +223,18 @@ const server = http.createServer(async (req, res) => {
           stay_fee_paise: d.stayFee * 100,
           razorpay_order_id: orderId,
           status: 'pending',
-        });
+        };
+
+        mockStore.set(orderId, regData);
+
+        if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+          try {
+            const db = getDb();
+            await db.from('registrations').insert(regData);
+          } catch (dbErr) {
+            console.warn('[DEV MOCK] Supabase pending insert warning:', dbErr.message);
+          }
+        }
 
         console.log(`[DEV MOCK] Created pending registration ${code} for team "${d.teamName}" [Team #${teamId}] (Total: ₹${feeInr}, All-Female: ${d.isAllFemale}, Stay: ${d.needStay ? d.stayCount + ' persons' : 'No'})`);
         return json(res, 200, {
@@ -234,7 +264,13 @@ const server = http.createServer(async (req, res) => {
       try {
         const body = await readJson(req);
         const orderId = body.razorpay_order_id;
-        const reg = mockStore.get(orderId);
+        let reg = mockStore.get(orderId);
+        if (!reg && process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+          try {
+            const { data } = await getDb().from('registrations').select('*').eq('razorpay_order_id', orderId).maybeSingle();
+            if (data) reg = data;
+          } catch {}
+        }
         if (!reg) {
           return json(res, 404, { error: 'Registration not found for this order.' });
         }
@@ -257,6 +293,36 @@ const server = http.createServer(async (req, res) => {
         ]);
         console.log(`[DEV MOCK] Verified payment and generated RSVP QR card & Invoice PDF for ${reg.reg_code} [Team #${teamId}] (All-Female: ${reg.is_all_female})`);
 
+        let emailed = false;
+        try {
+          if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+            await sendConfirmation(reg, png, pdf);
+            emailed = true;
+            console.log(`[DEV MOCK] Sent confirmation email for ${reg.reg_code} to ${reg.members.map(m => m.email).join(', ')}`);
+          } else {
+            console.warn('[DEV MOCK] SMTP_USER or SMTP_PASS not set; email skipped.');
+          }
+        } catch (mailErr) {
+          console.error('[DEV MOCK] Email sending failed:', mailErr);
+        }
+
+        if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+          try {
+            const db = getDb();
+            await db
+              .from('registrations')
+              .update({
+                status: 'paid',
+                razorpay_payment_id: reg.razorpay_payment_id,
+                paid_at: reg.paid_at,
+                email_sent_at: emailed ? new Date().toISOString() : null,
+              })
+              .eq('razorpay_order_id', orderId);
+          } catch (dbErr) {
+            console.warn('[DEV MOCK] Supabase update to paid warning:', dbErr.message);
+          }
+        }
+
         return json(res, 200, {
           ok: true,
           teamId,
@@ -268,7 +334,7 @@ const server = http.createServer(async (req, res) => {
           stayCount: reg.stay_count,
           fee: Math.round(reg.amount_paise / 100),
           emails: reg.members.map((m) => m.email),
-          emailed: false,
+          emailed,
           qr: `data:image/png;base64,${png.toString('base64')}`,
           invoicePdf: `data:application/pdf;base64,${pdf.toString('base64')}`,
         });

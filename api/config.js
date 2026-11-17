@@ -15,5 +15,10 @@ module.exports = (req, res) => {
     minMembers: cfg.MIN_MEMBERS,
     maxMembers: cfg.MAX_MEMBERS,
     tracks: cfg.TRACKS,
+    envCheck: {
+      smtp: Boolean(process.env.SMTP_USER && process.env.SMTP_PASS),
+      supabase: Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY),
+      razorpay: Boolean(process.env.RAZORPAY_KEY_ID && !process.env.RAZORPAY_KEY_ID.includes('xxxx')),
+    },
   }));
 };
