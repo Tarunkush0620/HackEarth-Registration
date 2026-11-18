@@ -85,6 +85,7 @@ const server = http.createServer(async (req, res) => {
     // Public event config endpoint
     if (route === 'config') {
       const cfg = require('./lib/config');
+      const { ROSTER } = require('./lib/roster');
       return json(res, 200, {
         eventName: cfg.EVENT_NAME,
         dates: cfg.EVENT_DATES,
@@ -95,6 +96,13 @@ const server = http.createServer(async (req, res) => {
         minMembers: cfg.MIN_MEMBERS,
         maxMembers: cfg.MAX_MEMBERS,
         tracks: cfg.TRACKS,
+        teams: ROSTER.map((t) => ({
+          id: t.team_id,
+          num: t.team_number,
+          name: t.team_name,
+          leader: t.team_leader,
+          panel: t.panel,
+        })),
         envCheck: {
           smtp: Boolean(process.env.SMTP_USER && process.env.SMTP_PASS),
           supabase: Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY),
@@ -115,32 +123,26 @@ const server = http.createServer(async (req, res) => {
         const amount = d.amountPaise || (feeInr * 100);
         const orderId = 'order_mock_' + Date.now();
 
-        let nextNum = 1;
-        let dbChecked = false;
+        const { resolveTeam } = require('./lib/roster');
+        let fallbackNum = 167;
         if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
           try {
             const db = getDb();
             const { data: latestRows, error } = await db.from('registrations').select('team_number').order('team_number', { ascending: false }).limit(1);
-            if (!error && Array.isArray(latestRows)) {
-              dbChecked = true;
-              if (latestRows.length && latestRows[0].team_number) {
-                nextNum = latestRows[0].team_number + 1;
-              } else {
-                nextNum = 1;
-              }
+            if (!error && Array.isArray(latestRows) && latestRows.length && latestRows[0].team_number) {
+              fallbackNum = Math.max(latestRows[0].team_number + 1, 167);
             }
           } catch (e) {
             console.warn('[DEV MOCK] Supabase latestRows check failed:', e.message);
           }
         }
-        if (!dbChecked) {
-          const existingNums = [...mockStore.values()].map((r) => r.team_number || (r.team_id ? parseInt(r.team_id, 10) : 0)).filter(n => !isNaN(n) && n > 0);
-          nextNum = existingNums.length ? Math.max(...existingNums) + 1 : 1;
-        }
-        const teamId = String(nextNum).padStart(3, '0');
+        const resolved = resolveTeam(d.teamName, leader.name, fallbackNum);
+        const teamNumber = resolved.teamNumber;
+        const teamId = resolved.teamId;
+        const panel = resolved.panel;
 
         const regData = {
-          team_number: nextNum,
+          team_number: teamNumber,
           team_id: teamId,
           reg_code: code,
           team_name: d.teamName,
@@ -191,7 +193,8 @@ const server = http.createServer(async (req, res) => {
           isAllFemale: d.isAllFemale,
           currency: 'INR',
           teamId,
-          teamNumber: nextNum,
+          teamNumber,
+          panel,
           regCode: code,
           prefill: { name: leader.name, email: leader.email, contact: d.leaderPhone },
         });

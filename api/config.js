@@ -15,6 +15,13 @@ module.exports = (req, res) => {
     minMembers: cfg.MIN_MEMBERS,
     maxMembers: cfg.MAX_MEMBERS,
     tracks: cfg.TRACKS,
+    teams: require('../lib/roster').ROSTER.map((t) => ({
+      id: t.team_id,
+      num: t.team_number,
+      name: t.team_name,
+      leader: t.team_leader,
+      panel: t.panel,
+    })),
     envCheck: {
       smtp: Boolean(process.env.SMTP_USER && process.env.SMTP_PASS),
       supabase: Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY),

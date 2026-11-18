@@ -9,11 +9,11 @@
   ],
   "functions": {
     "server.js": {
-      "includeFiles": "{assets/**,node_modules/pdfkit/js/standard-fonts/**,node_modules/pdfkit/js/data.trie}",
+      "includeFiles": "{lib/**,assets/**,node_modules/pdfkit/js/standard-fonts/**,node_modules/pdfkit/js/data.trie}",
       "maxDuration": 30
     },
     "api/**/*.js": {
-      "includeFiles": "{assets/**,node_modules/pdfkit/js/standard-fonts/**,node_modules/pdfkit/js/data.trie}",
+      "includeFiles": "{lib/**,assets/**,node_modules/pdfkit/js/standard-fonts/**,node_modules/pdfkit/js/data.trie}",
       "maxDuration": 30
     }
   }

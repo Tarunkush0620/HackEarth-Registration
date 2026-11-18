@@ -43,10 +43,15 @@ module.exports = async (req, res) => {
     const feeInr = d.fee;
     const amount = d.amountPaise || (feeInr * 100);
 
-    // Compute sequential team ID starting from 001
+    // Resolve pre-assigned team ID from official 166-team shortlist
+    const { resolveTeam } = require('../lib/roster');
     const { data: latestRows } = await db.from('registrations').select('team_number').order('team_number', { ascending: false }).limit(1);
-    const nextNum = (latestRows && latestRows.length && latestRows[0].team_number) ? (latestRows[0].team_number + 1) : 1;
-    const teamId = String(nextNum).padStart(3, '0');
+    const fallbackNum = (latestRows && latestRows.length && latestRows[0].team_number) ? Math.max(latestRows[0].team_number + 1, 167) : 167;
+
+    const resolved = resolveTeam(d.teamName, leader.name, fallbackNum);
+    const teamNumber = resolved.teamNumber;
+    const teamId = resolved.teamId;
+    const panel = resolved.panel;
 
     const order = await razorpay().orders.create({
       amount,
@@ -55,6 +60,7 @@ module.exports = async (req, res) => {
       notes: {
         team: d.teamName,
         team_id: teamId,
+        panel: panel ? String(panel) : '',
         reg_code: code,
         leader: leader.email,
         all_female: String(d.isAllFemale),
@@ -65,7 +71,7 @@ module.exports = async (req, res) => {
 
     // 5. Save as pending
     const { error: insErr } = await db.from('registrations').insert({
-      team_number: nextNum,
+      team_number: teamNumber,
       team_id: teamId,
       reg_code: code,
       status: 'pending',
@@ -104,7 +110,8 @@ module.exports = async (req, res) => {
       isAllFemale: d.isAllFemale,
       currency: 'INR',
       teamId,
-      teamNumber: nextNum,
+      teamNumber,
+      panel,
       regCode: code,
       prefill: { name: leader.name, email: leader.email, contact: d.leaderPhone },
     });

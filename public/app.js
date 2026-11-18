@@ -17,6 +17,7 @@
       { id: 'health-wellbeing', label: 'Health & Well-being' },
       { id: 'smart-communities', label: 'Smart Communities' },
     ],
+    teams: [{"id":"001","num":1,"name":"TechVed","leader":"Tanmay Kumar","panel":1},{"id":"002","num":2,"name":"Iconic","leader":"Sakshi Negi","panel":1},{"id":"003","num":3,"name":"HackNova","leader":"Ayush Kumar","panel":1},{"id":"004","num":4,"name":"OmniCore","leader":"Shivam Mishra","panel":1},{"id":"005","num":5,"name":"Dev","leader":"aarav Yadav","panel":1},{"id":"006","num":6,"name":"Doctor Stone","leader":"Mohd Harish","panel":1},{"id":"007","num":7,"name":"Eternals","leader":"Yash Verma","panel":1},{"id":"008","num":8,"name":"Binary Ninjas","leader":"Faisal Ahmad Khan","panel":1},{"id":"009","num":9,"name":"UAU","leader":"Prachi Aggarwal","panel":1},{"id":"010","num":10,"name":"Code Breaker","leader":"Anmol Verma","panel":1},{"id":"011","num":11,"name":"Pitwall Intelligence","leader":"Dhruv Mittal","panel":1},{"id":"012","num":12,"name":"Tech Titans","leader":"Priyanka Ramchandani","panel":1},{"id":"013","num":13,"name":"Xray Coders","leader":"Raj Kumar Gupta","panel":1},{"id":"014","num":14,"name":"SHADOW AI","leader":"DIVYANSH PANDEY","panel":1},{"id":"015","num":15,"name":"Pragati","leader":"Soumya Srivastava","panel":1},{"id":"016","num":16,"name":"SheCodes","leader":"Moupriya Das","panel":1},{"id":"017","num":17,"name":"CoddyIO","leader":"Jatin Garg","panel":1},{"id":"018","num":18,"name":"TRIVIA","leader":"Aayushi Kashyap","panel":1},{"id":"019","num":19,"name":"Shudarshan","leader":"Shikher Singh","panel":1},{"id":"020","num":20,"name":"son?","leader":"Tanuj Pathak","panel":1},{"id":"021","num":21,"name":"X","leader":"Harshit Ojha Ojha","panel":1},{"id":"022","num":22,"name":"Beyond Codes","leader":"Arjav Jain","panel":1},{"id":"023","num":23,"name":"Krisha","leader":"Pavani Agrawal","panel":2},{"id":"024","num":24,"name":"Artemis","leader":"Soumya Chaudhary","panel":2},{"id":"025","num":25,"name":"The Notion","leader":"Akanksha Kedia","panel":2},{"id":"026","num":26,"name":"E-VAIDYA","leader":"Shivam Tyagi","panel":2},{"id":"027","num":27,"name":"BroCode","leader":"Hardik Singal","panel":2},{"id":"028","num":28,"name":"Curious Coders","leader":"Harsh Goel","panel":2},{"id":"029","num":29,"name":"TEAM SARATHI","leader":"Vikash Kumar","panel":2},{"id":"030","num":30,"name":"AURA leaders","leader":"SILAMBARASAN C","panel":2},{"id":"031","num":31,"name":"Ñexacode","leader":"Gautam Kumar","panel":2},{"id":"032","num":32,"name":"AI Healthcare Assistant","leader":"Mumtaz Fatma","panel":2},{"id":"033","num":33,"name":"InnovoCreator","leader":"Jakkam Shambavi Saimamba","panel":2},{"id":"034","num":34,"name":"Codezilla","leader":"Rishabh Rathore","panel":2},{"id":"035","num":35,"name":"Algo avengers","leader":"Jitesh Sharma","panel":2},{"id":"036","num":36,"name":"NexGen","leader":"Nidhi Dhiman","panel":2},{"id":"037","num":37,"name":"Team Genesis","leader":"anamika tanwar","panel":2},{"id":"038","num":38,"name":"ciphernova","leader":"krishna kumar gupta","panel":2},{"id":"039","num":39,"name":"BuildForTomorrow","leader":"Satyam Kumar","panel":2},{"id":"040","num":40,"name":"NeuraNova","leader":"Vaibhav Jain","panel":2},{"id":"041","num":41,"name":"Green Innovators","leader":"Vaidya Sharanya","panel":2},{"id":"042","num":42,"name":"Electronerds","leader":"NIKHIL KUMAR GAUR","panel":2},{"id":"043","num":43,"name":"The Hack Hub","leader":"Abhinash Kumar","panel":3},{"id":"044","num":44,"name":"Code caffeine","leader":"Stuti Mehrotra","panel":3},{"id":"045","num":45,"name":"Team_SBS","leader":"Ayush Jha","panel":3},{"id":"046","num":46,"name":"Team Mechatrons","leader":"Agrim Gupta","panel":3},{"id":"047","num":47,"name":"SanVi","leader":"Sandhya Kumari","panel":3},{"id":"048","num":48,"name":"InnovHERs","leader":"Jai Saxena","panel":3},{"id":"049","num":49,"name":"NOIZ","leader":"Saksham Negi","panel":3},{"id":"050","num":50,"name":"Kanda Poha","leader":"Shaan Shukla","panel":3},{"id":"051","num":51,"name":"Zenvyx","leader":"Tanish Mangla","panel":3},{"id":"052","num":52,"name":"Kajukatli","leader":"Diptanshu jamar","panel":3},{"id":"053","num":53,"name":"hackerszz","leader":"Kalyani Agarwal","panel":3},{"id":"054","num":54,"name":"BlueWeave Team","leader":"Dharanidharan T","panel":3},{"id":"055","num":55,"name":"Innovators","leader":"Vanshika Goswami","panel":3},{"id":"056","num":56,"name":"Achievers","leader":"Saanvi Gupta","panel":3},{"id":"057","num":57,"name":"Mechatrons","leader":"Dejosri Elangovan","panel":3},{"id":"058","num":58,"name":"Team Innovaters","leader":"Siddharth Johari","panel":3},{"id":"059","num":59,"name":"pair programming","leader":"Prachi singh","panel":3},{"id":"060","num":60,"name":"Team Resence","leader":"Piyush Singh","panel":3},{"id":"061","num":61,"name":"Tech Innovators","leader":"Tisha Kothari","panel":3},{"id":"062","num":62,"name":"Harry","leader":"Harsh Pandey Pandey","panel":3},{"id":"063","num":63,"name":"CivicNex","leader":"Prabjot Singh Singh","panel":3},{"id":"064","num":64,"name":"White Tiger","leader":"Pawan Chaturvedi","panel":4},{"id":"065","num":65,"name":"Two shadows","leader":"Lalitha S","panel":4},{"id":"066","num":66,"name":"HERNOVA","leader":"Rohit Kumar dev","panel":4},{"id":"067","num":67,"name":"PARTH","leader":"Arav AGARWAL","panel":4},{"id":"068","num":68,"name":"Code Slayers","leader":"Arya Pandey","panel":4},{"id":"069","num":69,"name":"4stack","leader":"Varun Sah Sah","panel":4},{"id":"070","num":70,"name":"Byteforce","leader":"Ankit Kumar Yadav","panel":4},{"id":"071","num":71,"name":"Codex","leader":"Ishan","panel":4},{"id":"072","num":72,"name":"NEXORA","leader":"Shashwat Kumar Chaurasiya","panel":4},{"id":"073","num":73,"name":"Codetopia","leader":"Farhan Khan","panel":4},{"id":"074","num":74,"name":"Innovexa","leader":"Harsh Bhatnagar","panel":4},{"id":"075","num":75,"name":"Innovatrix","leader":"Tanmay Agarwal Agarwal","panel":4},{"id":"076","num":76,"name":"CodeCrew","leader":"Devansh Kotiyal","panel":4},{"id":"077","num":77,"name":"NovaX","leader":"SAMRUDDHI WAYKAR","panel":4},{"id":"078","num":78,"name":"Janlewa_Coders","leader":"Naitik Jain","panel":4},{"id":"079","num":79,"name":"Divya Prakash Rai","leader":"Ayushi Maurya Maurya","panel":4},{"id":"080","num":80,"name":"Zero Latency","leader":"Harsh","panel":4},{"id":"081","num":81,"name":"Matrix","leader":"Riyush Rai","panel":4},{"id":"082","num":82,"name":"Wampire Slayers","leader":"Prashant Pandey","panel":4},{"id":"083","num":83,"name":"Chrome Cartel","leader":"Swapnil Jadoun","panel":4},{"id":"084","num":84,"name":"cybernova","leader":"Saniya parveen","panel":5},{"id":"085","num":85,"name":"TECH_TITANS","leader":"HARSH VERMA","panel":5},{"id":"086","num":86,"name":"Glitch Hunters","leader":"Ayush Singh","panel":5},{"id":"087","num":87,"name":"DuoX","leader":"Pratha Varshney","panel":5},{"id":"088","num":88,"name":"Zero Toxic","leader":"Pragya Rajwanshi","panel":5},{"id":"089","num":89,"name":"Mind Monks","leader":"Akanksha Singh","panel":5},{"id":"090","num":90,"name":"Tech Karma","leader":"Aryan Chourasia","panel":5},{"id":"091","num":91,"name":"Onslaught","leader":"Aman Patel","panel":5},{"id":"092","num":92,"name":"Sakhibridge","leader":"Yuv Chaudhary","panel":5},{"id":"093","num":93,"name":"UNITx","leader":"utkarsh verma","panel":5},{"id":"094","num":94,"name":"Power Rangers","leader":"Meenu","panel":5},{"id":"095","num":95,"name":"Nova Core","leader":"Rajni Kumari","panel":5},{"id":"096","num":96,"name":"ULTRON","leader":"ANSHU KUMAR MISHRA","panel":5},{"id":"097","num":97,"name":"Ghost","leader":"Kunwar Divyam","panel":5},{"id":"098","num":98,"name":"SHE CODES","leader":"Bhoomika Kalra","panel":5},{"id":"099","num":99,"name":"Glitching Pixels","leader":"Harveer","panel":5},{"id":"100","num":100,"name":"TEAM AQUA","leader":"Shlok Gupta","panel":5},{"id":"101","num":101,"name":"The Conquerors","leader":"Srishti Yadav Yadav","panel":5},{"id":"102","num":102,"name":"INSPINOVA","leader":"Divyanshu Raj","panel":5},{"id":"103","num":103,"name":"TEAM AURA","leader":"SHASHANK GODUGU","panel":5},{"id":"104","num":104,"name":"Luminary","leader":"Aishwarya Singh","panel":6},{"id":"105","num":105,"name":"Team Ignis","leader":"Simran Yadav","panel":6},{"id":"106","num":106,"name":"Electro trio","leader":"RUKASHINI K","panel":6},{"id":"107","num":107,"name":"Bangers","leader":"Sagar Pathak","panel":6},{"id":"108","num":108,"name":"Team Nirmaan","leader":"Aman Sharma","panel":6},{"id":"109","num":109,"name":"CODEFLUX","leader":"Aditya Jha","panel":6},{"id":"110","num":110,"name":"CodeQuasters","leader":"Navya Gupta","panel":6},{"id":"111","num":111,"name":"The Mavericks","leader":"Priyanka Kumari","panel":6},{"id":"112","num":112,"name":"PUSH Panthers","leader":"Hardik Garg","panel":6},{"id":"113","num":113,"name":"CyberVortex","leader":"Aditi Tandon","panel":6},{"id":"114","num":114,"name":"Agent Forge","leader":"Asmita Tripathi","panel":6},{"id":"115","num":115,"name":"Hypercode","leader":"SAUMYA MAURYA MAURYA","panel":6},{"id":"116","num":116,"name":"Kafka","leader":"Ayush Verma","panel":6},{"id":"117","num":117,"name":"Hackgen","leader":"Nikhil Sharma","panel":6},{"id":"118","num":118,"name":"WayFinders","leader":"Sahil Rana","panel":6},{"id":"119","num":119,"name":"Jan drishti","leader":"Pushkar Sachdeva","panel":6},{"id":"120","num":120,"name":"TEAM JARVIS","leader":"Aditya Mittal","panel":6},{"id":"121","num":121,"name":"Stackvane","leader":"Aryan Chikara","panel":6},{"id":"122","num":122,"name":"Nini gang","leader":"Priyanshu","panel":6},{"id":"123","num":123,"name":"CyberPaths","leader":"Shivanshi Vishwakarma","panel":6},{"id":"124","num":124,"name":"NexAI","leader":"Arush Gupta","panel":7},{"id":"125","num":125,"name":"She-Sheild AI","leader":"Manvi Kr","panel":7},{"id":"126","num":126,"name":"OneSolution","leader":"Vansh Gautam","panel":7},{"id":"127","num":127,"name":"PrintAPM","leader":"Jagat Prakash","panel":7},{"id":"128","num":128,"name":"TheVisionGuild","leader":"Nitin Kumar Singh","panel":7},{"id":"129","num":129,"name":"UnPaid Interns","leader":"Mustafa Abdabhaiwala","panel":7},{"id":"130","num":130,"name":"Fourth Dimensions","leader":"Gaurav Pratap Singh","panel":7},{"id":"131","num":131,"name":"Blueprint","leader":"Purnika Tiwari","panel":7},{"id":"132","num":132,"name":"TechSolvers","leader":"Ahan Raj","panel":7},{"id":"133","num":133,"name":"Buzzer","leader":"Mayank Patel","panel":7},{"id":"134","num":134,"name":"Cryptic Coders","leader":"Jeeraj Pal","panel":7},{"id":"135","num":135,"name":"Careeer coders","leader":"Mohd Saif Ansari","panel":7},{"id":"136","num":136,"name":"TheGameChangers","leader":"Manjari Tripathi","panel":7},{"id":"137","num":137,"name":"Robin Hoods","leader":"Joydeep Singh Bedi","panel":7},{"id":"138","num":138,"name":"Prithv-E","leader":"Dhruv Soran","panel":7},{"id":"139","num":139,"name":"Khote Sikkey","leader":"Kapish Rawat","panel":7},{"id":"140","num":140,"name":"JimJam","leader":"Aditya","panel":7},{"id":"141","num":141,"name":"Decoders","leader":"Akshat Auliyan","panel":7},{"id":"142","num":142,"name":"AlphaCoder","leader":"Ritik Pandey","panel":7},{"id":"143","num":143,"name":"Tech Titans","leader":"Shivsagar","panel":7},{"id":"144","num":144,"name":"Pharma Minds","leader":"Monisha Gupta","panel":7},{"id":"145","num":145,"name":"She Knows","leader":"Khilari Saini","panel":7},{"id":"146","num":146,"name":"SnapTrons","leader":"Priyanshi Garg","panel":8},{"id":"147","num":147,"name":"She Shield","leader":"Vedika Pandey","panel":8},{"id":"148","num":148,"name":"Slytherin","leader":"shivam Kashyap","panel":8},{"id":"149","num":149,"name":"Phoenix","leader":"Nishant Kumar","panel":8},{"id":"150","num":150,"name":"SHYNE","leader":"NEERAJ Singh","panel":8},{"id":"151","num":151,"name":"HackSphere","leader":"Tanya Chandra","panel":8},{"id":"152","num":152,"name":"Kiko","leader":"Dev Vardhan","panel":8},{"id":"153","num":153,"name":"Hacker Duo","leader":"Sneha Vashisht","panel":8},{"id":"154","num":154,"name":"Butter_Naan","leader":"Aryash Jain","panel":8},{"id":"155","num":155,"name":"POWER RANGERS","leader":"Aadi Dhankhar","panel":8},{"id":"156","num":156,"name":"NexaForge","leader":"Lovekush Goyal","panel":8},{"id":"157","num":157,"name":"Titans","leader":"ARNAV YADAV","panel":8},{"id":"158","num":158,"name":"UniDevs","leader":"Anadi Gupta","panel":8},{"id":"159","num":159,"name":"MeshMinds","leader":"Kinjal Rohilla","panel":8},{"id":"160","num":160,"name":"Vrases","leader":"Shivam Mishra","panel":8},{"id":"161","num":161,"name":"SPARKS_SKY","leader":"Shyam Sundar Gosai","panel":8},{"id":"162","num":162,"name":"Runtime Terror","leader":"Vijay Prasad","panel":8},{"id":"163","num":163,"name":"SYNCURA","leader":"SHRESTHI RS","panel":8},{"id":"164","num":164,"name":"Rot Brains","leader":"Vaibhav Khanna","panel":8},{"id":"165","num":165,"name":"Elite Engine","leader":"Keshav Gupta","panel":8},{"id":"166","num":166,"name":"The Debuggers","leader":"Md Alfaaz","panel":8}],
   };
 
   const state = { size: 2, cfg: DEFAULT_CFG };
@@ -224,6 +225,86 @@
           box.appendChild(l);
         });
       }
+    }
+  }
+
+  function findMatchingTeam(name, leader = '') {
+    if (!state.cfg?.teams || !name) return null;
+    const clean = String(name).trim();
+    const key = clean.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (!key) return null;
+
+    let list = state.cfg.teams.filter((t) => t.name.toLowerCase().trim() === clean.toLowerCase());
+    if (list.length === 0) {
+      list = state.cfg.teams.filter((t) => t.name.toLowerCase().replace(/[^a-z0-9]/g, '') === key);
+    }
+    if (list.length > 1 && leader) {
+      const lKey = leader.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const byL = list.find((t) => {
+        const tlKey = t.leader.toLowerCase().replace(/[^a-z0-9]/g, '');
+        return lKey.includes(tlKey) || tlKey.includes(lKey);
+      });
+      if (byL) return byL;
+    }
+    if (list.length > 0) return list[0];
+
+    const stripped = key.replace(/^team/, '');
+    list = state.cfg.teams.filter((t) => {
+      const tKey = t.name.toLowerCase().replace(/[^a-z0-9]/g, '').replace(/^team/, '');
+      return tKey === stripped || (stripped.length >= 3 && (tKey.startsWith(stripped) || stripped.startsWith(tKey)));
+    });
+    if (list.length > 1 && leader) {
+      const lKey = leader.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const byL = list.find((t) => {
+        const tlKey = t.leader.toLowerCase().replace(/[^a-z0-9]/g, '');
+        return lKey.includes(tlKey) || tlKey.includes(lKey);
+      });
+      if (byL) return byL;
+    }
+    return list.length > 0 ? list[0] : null;
+  }
+
+  function renderTeamsDatalist() {
+    const list = $('#teamsList');
+    if (!list || !Array.isArray(state.cfg?.teams)) return;
+    list.innerHTML = '';
+    state.cfg.teams.forEach((t) => {
+      const opt = document.createElement('option');
+      opt.value = t.name;
+      opt.label = `Team #${t.id} · Panel ${t.panel} (${t.leader})`;
+      list.appendChild(opt);
+    });
+  }
+
+  function updateTeamMatchBadge() {
+    const badge = $('#teamMatchBadge');
+    if (!badge) return;
+    const teamInput = $('#teamName');
+    const leaderInput = document.querySelector('[name=mname]');
+    const val = (teamInput?.value || '').trim();
+    const leaderVal = (leaderInput?.value || '').trim();
+
+    if (!val || val.length < 2) {
+      badge.hidden = true;
+      badge.innerHTML = '';
+      return;
+    }
+
+    const matched = findMatchingTeam(val, leaderVal);
+    if (matched) {
+      badge.hidden = false;
+      badge.className = 'team-badge matched';
+      badge.innerHTML = `✓ <b>Official Team #${matched.id}</b> · Panel ${matched.panel} · Leader: ${esc(matched.leader)}`;
+      if (leaderInput && !leaderInput.value) {
+        leaderInput.placeholder = matched.leader;
+      }
+    } else if (val.length >= 3) {
+      badge.hidden = false;
+      badge.className = 'team-badge unmatched';
+      badge.innerHTML = `⚠️ Unlisted team name — please verify spelling with shortlist`;
+    } else {
+      badge.hidden = true;
+      badge.innerHTML = '';
     }
   }
 
@@ -435,14 +516,21 @@
     renderSize();
     renderMembers();
     renderTracks();
+    renderTeamsDatalist();
     renderStayCountOptions();
     updatePricing();
+    updateTeamMatchBadge();
   }
 
   // Initial immediate render with defaults
   applyConfig(DEFAULT_CFG);
 
   document.querySelectorAll('input[name=needStay]').forEach((r) => r.addEventListener('change', updatePricing));
+  const teamInputEl = $('#teamName');
+  if (teamInputEl) {
+    teamInputEl.addEventListener('input', updateTeamMatchBadge);
+    teamInputEl.addEventListener('change', updateTeamMatchBadge);
+  }
   const staySel = $('#stayCount');
   if (staySel) staySel.addEventListener('change', updatePricing);
 
