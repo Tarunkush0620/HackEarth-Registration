@@ -420,6 +420,13 @@
     });
   }
 
+  const utrInput = $('#utrNumber');
+  if (utrInput) {
+    utrInput.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 12);
+    });
+  }
+
   /* ---------- collect + submit ---------- */
   function collect() {
     const needStay = ($('input[name=needStay]:checked') || {}).value === 'yes';
@@ -479,16 +486,16 @@
 
     // Instant client validation for required fields
     const clientErrors = {};
-    const txn = body.txnId;
-    const utr = body.utrNumber;
+    const txn = (body.txnId || '').trim();
+    const utr = (body.utrNumber || '').trim();
     if (!txn && !utr) {
       clientErrors.txnId = 'Enter your Paytm Transaction ID or 12-digit UPI UTR number.';
     } else {
-      if (txn && txn.length < 5) {
-        clientErrors.txnId = 'Transaction ID should be at least 5 characters.';
+      if (txn && txn.length < 6) {
+        clientErrors.txnId = 'Paytm Transaction ID should be at least 6 characters.';
       }
-      if (utr && utr.length < 6) {
-        clientErrors.utrNumber = 'UPI UTR should be at least 6 characters.';
+      if (utr && !/^\d{12}$/.test(utr)) {
+        clientErrors.utrNumber = 'UPI UTR must be an exact 12-digit number (e.g. 405234123456).';
       }
     }
     if (!body.paymentProof) {

@@ -193,8 +193,8 @@
           <div class="step-title">UPI Ref / UTR Number</div>
           <div class="field" style="margin-top:8px;">
             <label for="utrNumber">12-Digit UPI UTR / Ref Number <span class="opt">required if paid via UPI</span></label>
-            <input id="utrNumber" name="utrNumber" placeholder="Enter 12-digit UPI UTR / Ref Number" autocomplete="off" data-field="utrNumber">
-            <p class="hint">12-digit UTR number from Google Pay, PhonePe, Paytm UPI, or bank SMS.</p>
+            <input id="utrNumber" name="utrNumber" type="text" inputmode="numeric" maxlength="12" pattern="[0-9]{12}" placeholder="Enter 12-digit UPI UTR / Ref Number" autocomplete="off" data-field="utrNumber">
+            <p class="hint">12-digit numeric UTR from Google Pay, PhonePe, Paytm UPI, or bank SMS.</p>
             <p class="err" data-err="utrNumber" role="alert"></p>
           </div>
         </div>
@@ -223,6 +223,14 @@
             </div>
             <p class="err" data-err="paymentProof" role="alert"></p>
           </div>
+        </div>
+      </div>
+
+      <div class="audit-warning-box">
+        <div class="warning-icon">⚖️</div>
+        <div class="warning-content">
+          <div class="warning-title">Mandatory Audit &amp; Verification Notice</div>
+          <p class="warning-desc">All Transaction IDs, UPI UTR numbers, and uploaded receipts are reconciled against Galgotias University bank settlements. Submitting forged receipts, recycled UTRs, or invalid numbers will lead to <b>immediate disqualification</b>, cancellation of the RSVP pass, and disciplinary reporting.</p>
         </div>
       </div>
     </div>
