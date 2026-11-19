@@ -49,6 +49,7 @@
       if (slot) slot.textContent = '';
       e.target.removeAttribute('aria-invalid');
     }
+    debouncedSaveDraft();
   });
   form.addEventListener('change', (e) => {
     const key = e.target.dataset.field || e.target.id || e.target.name;
@@ -57,6 +58,7 @@
       if (slot) slot.textContent = '';
       e.target.removeAttribute('aria-invalid');
     }
+    debouncedSaveDraft();
   });
 
   /* ---------- members & pricing ---------- */
@@ -559,7 +561,101 @@
     $('#doneEmail').textContent = d.emailed
       ? `A copy was emailed to ${d.emails.join(', ')}.`
       : 'Your email is being sent. If it does not arrive in a few minutes, download the QR above and write to the organisers.';
+    clearDraft();
     window.scrollTo({ top: done.offsetTop - 20, behavior: 'smooth' });
+  }
+
+  /* ---------- LocalStorage Draft Auto-Save & Restore ---------- */
+  const DRAFT_KEY = 'he26_form_draft_v1';
+  let saveDraftTimer = null;
+
+  function debouncedSaveDraft() {
+    clearTimeout(saveDraftTimer);
+    saveDraftTimer = setTimeout(saveDraft, 300);
+  }
+
+  function saveDraft() {
+    try {
+      const data = {
+        teamName: ($('#teamName') || {}).value || '',
+        unstopTeamId: ($('#unstopTeamId') || {}).value || '',
+        college: ($('#college') || {}).value || '',
+        city: ($('#city') || {}).value || '',
+        ideaTitle: ($('#ideaTitle') || {}).value || '',
+        track: ($('#track') || {}).value || '',
+        size: state.size,
+        needStay: ($('input[name=needStay]:checked') || {}).value || 'no',
+        stayCount: ($('#stayCount') || {}).value || '',
+        emergencyName: ($('#emergencyName') || {}).value || '',
+        emergencyRelation: ($('#emergencyRelation') || {}).value || '',
+        emergencyPhone: ($('#emergencyPhone') || {}).value || '',
+        txnId: ($('#txnId') || {}).value || '',
+        utrNumber: ($('#utrNumber') || {}).value || '',
+        members: [...document.querySelectorAll('.member')].map((m) => ({
+          name: (m.querySelector('[name=mname]') || {}).value || '',
+          email: (m.querySelector('[name=memail]') || {}).value || '',
+          gender: (m.querySelector('[name=mgender]') || {}).value || '',
+          phone: (m.querySelector('[name=mphone]') || {}).value || '',
+          rollNumber: (m.querySelector('[name=mroll]') || {}).value || '',
+        })),
+      };
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+    } catch {}
+  }
+
+  function restoreDraft() {
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      if (!data || typeof data !== 'object') return;
+
+      if (data.teamName && $('#teamName')) $('#teamName').value = data.teamName;
+      if (data.unstopTeamId && $('#unstopTeamId')) $('#unstopTeamId').value = data.unstopTeamId;
+      if (data.college && $('#college')) $('#college').value = data.college;
+      if (data.city && $('#city')) $('#city').value = data.city;
+      if (data.ideaTitle && $('#ideaTitle')) $('#ideaTitle').value = data.ideaTitle;
+      if (data.track && $('#track')) $('#track').value = data.track;
+      if (data.emergencyName && $('#emergencyName')) $('#emergencyName').value = data.emergencyName;
+      if (data.emergencyRelation && $('#emergencyRelation')) $('#emergencyRelation').value = data.emergencyRelation;
+      if (data.emergencyPhone && $('#emergencyPhone')) $('#emergencyPhone').value = data.emergencyPhone;
+      if (data.txnId && $('#txnId')) $('#txnId').value = data.txnId;
+      if (data.utrNumber && $('#utrNumber')) $('#utrNumber').value = data.utrNumber;
+
+      if (data.size && data.size >= state.cfg.minMembers && data.size <= state.cfg.maxMembers) {
+        state.size = data.size;
+        const sizeRadio = document.querySelector(`input[name=size][value="${data.size}"]`);
+        if (sizeRadio) sizeRadio.checked = true;
+      }
+
+      if (data.needStay) {
+        const stayRadio = document.querySelector(`input[name=needStay][value="${data.needStay}"]`);
+        if (stayRadio) stayRadio.checked = true;
+      }
+
+      if (Array.isArray(data.members) && data.members.length > 0) {
+        renderMembers();
+        const memberEls = document.querySelectorAll('.member');
+        data.members.forEach((m, idx) => {
+          const el = memberEls[idx];
+          if (!el) return;
+          if (m.name && el.querySelector('[name=mname]')) el.querySelector('[name=mname]').value = m.name;
+          if (m.email && el.querySelector('[name=memail]')) el.querySelector('[name=memail]').value = m.email;
+          if (m.gender && el.querySelector('[name=mgender]')) el.querySelector('[name=mgender]').value = m.gender;
+          if (m.phone && el.querySelector('[name=mphone]')) el.querySelector('[name=mphone]').value = m.phone;
+          if (m.rollNumber && el.querySelector('[name=mroll]')) el.querySelector('[name=mroll]').value = m.rollNumber;
+        });
+      }
+
+      renderStayCountOptions();
+      if (data.stayCount && $('#stayCount')) $('#stayCount').value = data.stayCount;
+      updatePricing();
+      updateTeamMatchBadge();
+    } catch {}
+  }
+
+  function clearDraft() {
+    try { localStorage.removeItem(DRAFT_KEY); } catch {}
   }
 
   /* ---------- policy dialog modal ---------- */
@@ -620,6 +716,7 @@
 
   // Initial immediate render with defaults
   applyConfig(DEFAULT_CFG);
+  restoreDraft();
 
   document.querySelectorAll('input[name=needStay]').forEach((r) => r.addEventListener('change', updatePricing));
   const teamInputEl = $('#teamName');
