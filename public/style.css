@@ -235,6 +235,209 @@ fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
 .policy-modal-body li { margin: 6px 0; }
 .policy-modal-body .alert-box { background: #fdf5f9; border-left: 4px solid var(--magenta); padding: 12px 16px; border-radius: 0 10px 10px 0; margin: 16px 0; }
 
+/* ---------- Paytm Institutional Payment & Verification Section ---------- */
+.req { color: var(--danger); font-weight: 700; margin-left: 2px; }
+
+.paytm-card {
+  background: #ffffff;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin: 16px 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.paytm-step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.step-badge {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--indigo);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(51, 38, 107, 0.25);
+}
+
+.step-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.step-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--indigo);
+  margin-bottom: 4px;
+}
+
+.step-desc {
+  font-size: 13.5px;
+  color: var(--indigo-soft);
+  margin: 0 0 12px;
+  line-height: 1.45;
+}
+
+.btn-paytm {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #002970 0%, #0056b3 100%);
+  color: #ffffff !important;
+  text-decoration: none !important;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14.5px;
+  letter-spacing: 0.2px;
+  box-shadow: 0 3px 10px rgba(0, 41, 112, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.btn-paytm:hover {
+  background: linear-gradient(135deg, #001f56 0%, #004494 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(0, 41, 112, 0.35);
+}
+
+.btn-paytm-icon {
+  font-size: 17px;
+}
+
+.btn-paytm-arrow {
+  font-size: 16px;
+  transition: transform 0.15s;
+}
+
+.btn-paytm:hover .btn-paytm-arrow {
+  transform: translate(2px, -2px);
+}
+
+/* Upload zone */
+.upload-zone {
+  border: 2px dashed var(--line);
+  border-radius: 14px;
+  background: #faf8fd;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+}
+
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: var(--magenta);
+  background: #fdf5f9;
+}
+
+.file-hidden {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.upload-prompt {
+  pointer-events: none;
+  padding: 10px 8px;
+}
+
+.upload-icon {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+
+.upload-text {
+  font-size: 14px;
+  color: var(--indigo);
+}
+
+.upload-text strong {
+  color: var(--magenta);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.upload-sub {
+  font-size: 12px;
+  color: var(--indigo-soft);
+  margin-top: 4px;
+}
+
+.upload-preview {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 14px;
+  text-align: left;
+}
+
+.preview-img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+  background: #f0f0f0;
+}
+
+.preview-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.preview-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--indigo);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.preview-size {
+  font-size: 12px;
+  color: var(--indigo-soft);
+}
+
+.btn-replace {
+  align-self: flex-start;
+  margin-top: 4px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: var(--magenta);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.btn-replace:hover {
+  color: var(--indigo);
+}
+
 @media (max-width: 860px) {
   .layout { grid-template-columns: 1fr; }
   .side { position: static; }
@@ -243,5 +446,8 @@ fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
   .card { padding: 20px 16px; }
   .grid2, .tracks { grid-template-columns: 1fr; }
   h2 { font-size: 26px; }
+  .paytm-step { flex-direction: column; gap: 10px; }
+  .btn-paytm { width: 100%; justify-content: center; }
+  .upload-preview { flex-direction: column; align-items: flex-start; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

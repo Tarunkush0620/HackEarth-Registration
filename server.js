@@ -111,181 +111,21 @@ const server = http.createServer(async (req, res) => {
       });
     }
 
-    // Handle mock payment flows if running in mock/demo mode
-    if (mockMode && route === 'create-order' && req.method === 'POST') {
+    // Handle registration submission with Paytm transaction verification
+    if ((route === 'create-order' || route === 'submit-registration' || route === 'register') && req.method === 'POST') {
       try {
-        const { errors, data: d } = validate(await readJson(req));
-        if (errors) return json(res, 422, { errors });
-
-        const leader = d.members[0];
-        const code = regCode();
-        const feeInr = d.fee;
-        const amount = d.amountPaise || (feeInr * 100);
-        const orderId = 'order_mock_' + Date.now();
-
-        const { resolveTeam } = require('./lib/roster');
-        let fallbackNum = 167;
-        if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
-          try {
-            const db = getDb();
-            const { data: latestRows, error } = await db.from('registrations').select('team_number').order('team_number', { ascending: false }).limit(1);
-            if (!error && Array.isArray(latestRows) && latestRows.length && latestRows[0].team_number) {
-              fallbackNum = Math.max(latestRows[0].team_number + 1, 167);
-            }
-          } catch (e) {
-            console.warn('[DEV MOCK] Supabase latestRows check failed:', e.message);
-          }
-        }
-        const resolved = resolveTeam(d.teamName, leader.name, fallbackNum);
-        const teamNumber = resolved.teamNumber;
-        const teamId = resolved.teamId;
-        const panel = resolved.panel;
-
-        const regData = {
-          team_number: teamNumber,
-          team_id: teamId,
-          reg_code: code,
-          team_name: d.teamName,
-          team_name_key: d.teamNameKey || d.teamName.trim().toLowerCase(),
-          track: d.track,
-          idea_title: d.ideaTitle,
-          college: d.college,
-          city: d.city,
-          unstop_team_id: d.unstopTeamId,
-          leader_name: leader.name,
-          leader_email: leader.email,
-          leader_phone: d.leaderPhone,
-          emergency_name: d.emergencyName,
-          emergency_relation: d.emergencyRelation,
-          emergency_phone: d.emergencyPhone,
-          members: d.members,
-          amount_paise: amount,
-          is_all_female: d.isAllFemale,
-          need_stay: d.needStay,
-          stay_count: d.stayCount,
-          stay_fee_paise: d.stayFee * 100,
-          razorpay_order_id: orderId,
-          status: 'pending',
-        };
-
-        mockStore.set(orderId, regData);
-
-        if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
-          try {
-            const db = getDb();
-            await db.from('registrations').insert(regData);
-          } catch (dbErr) {
-            console.warn('[DEV MOCK] Supabase pending insert warning:', dbErr.message);
-          }
-        }
-
-        console.log(`[DEV MOCK] Created pending registration ${code} for team "${d.teamName}" [Team #${teamId}] (Total: ₹${feeInr}, All-Female: ${d.isAllFemale}, Stay: ${d.needStay ? d.stayCount + ' persons' : 'No'})`);
-        return json(res, 200, {
-          mock: true,
-          keyId: 'rzp_test_mock',
-          orderId,
-          amount,
-          fee: feeInr,
-          regFee: d.regFee,
-          stayFee: d.stayFee,
-          needStay: d.needStay,
-          stayCount: d.stayCount,
-          isAllFemale: d.isAllFemale,
-          currency: 'INR',
-          teamId,
-          teamNumber,
-          panel,
-          regCode: code,
-          prefill: { name: leader.name, email: leader.email, contact: d.leaderPhone },
-        });
+        const { processRegistration } = require('./lib/register');
+        const body = await readJson(req);
+        const result = await processRegistration(body, { mockStore });
+        return json(res, result.status, result.data || { errors: result.errors, error: result.error });
       } catch (err) {
-        console.error('Mock create-order error:', err);
-        return json(res, 500, { error: 'Mock order creation failed' });
+        console.error('Registration processing failed:', err);
+        return json(res, 500, { error: 'Registration could not be completed. Please check your details and try again.' });
       }
     }
 
-    if (mockMode && route === 'verify-payment' && req.method === 'POST') {
-      try {
-        const body = await readJson(req);
-        const orderId = body.razorpay_order_id;
-        let reg = mockStore.get(orderId);
-        if (!reg && process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
-          try {
-            const { data } = await getDb().from('registrations').select('*').eq('razorpay_order_id', orderId).maybeSingle();
-            if (data) reg = data;
-          } catch {}
-        }
-        if (!reg) {
-          return json(res, 404, { error: 'Registration not found for this order.' });
-        }
-        reg.status = 'paid';
-        reg.razorpay_payment_id = body.razorpay_payment_id || ('pay_mock_' + Date.now());
-        reg.paid_at = new Date().toISOString();
-
-        const teamId = reg.team_id || (reg.team_number ? String(reg.team_number).padStart(3, '0') : '001');
-        const [png, pdf] = await Promise.all([
-          buildCard({
-            teamName: reg.team_name,
-            regCode: reg.reg_code,
-            trackId: reg.track,
-            isAllFemale: reg.is_all_female,
-            needStay: reg.need_stay,
-            stayCount: reg.stay_count,
-            teamId,
-          }),
-          buildInvoicePdf(reg),
-        ]);
-        console.log(`[DEV MOCK] Verified payment and generated RSVP QR card & Invoice PDF for ${reg.reg_code} [Team #${teamId}] (All-Female: ${reg.is_all_female})`);
-
-        let emailed = false;
-        try {
-          if (process.env.SMTP_USER && process.env.SMTP_PASS) {
-            await sendConfirmation(reg, png, pdf);
-            emailed = true;
-            console.log(`[DEV MOCK] Sent confirmation email for ${reg.reg_code} to ${reg.members.map(m => m.email).join(', ')}`);
-          } else {
-            console.warn('[DEV MOCK] SMTP_USER or SMTP_PASS not set; email skipped.');
-          }
-        } catch (mailErr) {
-          console.error('[DEV MOCK] Email sending failed:', mailErr);
-        }
-
-        if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
-          try {
-            const db = getDb();
-            await db
-              .from('registrations')
-              .update({
-                status: 'paid',
-                razorpay_payment_id: reg.razorpay_payment_id,
-                paid_at: reg.paid_at,
-                email_sent_at: emailed ? new Date().toISOString() : null,
-              })
-              .eq('razorpay_order_id', orderId);
-          } catch (dbErr) {
-            console.warn('[DEV MOCK] Supabase update to paid warning:', dbErr.message);
-          }
-        }
-
-        return json(res, 200, {
-          ok: true,
-          teamId,
-          teamNumber: reg.team_number || 1,
-          regCode: reg.reg_code,
-          teamName: reg.team_name,
-          isAllFemale: reg.is_all_female,
-          needStay: reg.need_stay,
-          stayCount: reg.stay_count,
-          fee: Math.round(reg.amount_paise / 100),
-          emails: reg.members.map((m) => m.email),
-          emailed,
-          qr: `data:image/png;base64,${png.toString('base64')}`,
-          invoicePdf: `data:application/pdf;base64,${pdf.toString('base64')}`,
-        });
-      } catch (err) {
-        console.error('Mock verify-payment error:', err);
-        return json(res, 500, { error: 'Mock payment verification failed', details: err.message, stack: err.stack });
-      }
+    if (route === 'verify-payment' && req.method === 'POST') {
+      return json(res, 200, { ok: true, message: 'Payment confirmed via Paytm transaction ID' });
     }
 
     // Scanner Desk API Mock Handlers

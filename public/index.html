@@ -158,15 +158,68 @@
       <input id="ideaTitle" name="ideaTitle" maxlength="120" autocomplete="off" placeholder="e.g. EcoRoute Planner">
     </div>
 
+    <h2>Payment &amp; Verification</h2>
+    <div class="paytm-card">
+      <div class="paytm-step">
+        <div class="step-badge">1</div>
+        <div class="step-body">
+          <div class="step-title">Pay via Galgotias University Paytm Portal</div>
+          <p class="step-desc">Open the university's official event collection page (ICCSAI 2026 EVENT). You can pay using Paytm, UPI, GPay, PhonePe, Debit/Credit Card, or Net Banking.</p>
+          <a href="https://paytm.me/PYTMPS/h2yh3dP" target="_blank" rel="noopener noreferrer" class="btn-paytm" id="btnPaytm">
+            <span class="btn-paytm-icon">🏛️</span>
+            <span class="btn-paytm-label">Pay ₹<span class="fee-inline">400</span> on University Paytm Portal</span>
+            <span class="btn-paytm-arrow">↗</span>
+          </a>
+          <p class="hint" style="margin-top:8px;">Amount to enter on Paytm: <b>₹<span class="fee-inline">400</span></b> (matches your total fee calculated above).</p>
+        </div>
+      </div>
+
+      <div class="paytm-step">
+        <div class="step-badge">2</div>
+        <div class="step-body">
+          <div class="step-title">Enter Transaction ID &amp; Upload Receipt</div>
+          <div class="grid2" style="margin-top:10px;">
+            <div class="field full-col">
+              <label for="txnId">Paytm Transaction ID or 12-digit UPI UTR / Ref <span class="req">*</span></label>
+              <input id="txnId" name="txnId" required placeholder="e.g. 20260219... or 12-digit UPI Ref Number" autocomplete="off" data-field="txnId">
+              <p class="hint">Available on your Paytm order history, UPI receipt, or SMS confirmation.</p>
+              <p class="err" data-err="txnId" role="alert"></p>
+            </div>
+
+            <div class="field full-col">
+              <label for="paymentProof">Payment Screenshot / Receipt <span class="req">*</span></label>
+              <div class="upload-zone" id="proofDropzone">
+                <input type="file" id="paymentProof" name="paymentProof" accept="image/*,.pdf" class="file-hidden" data-field="paymentProof">
+                <div class="upload-prompt" id="uploadPrompt">
+                  <div class="upload-icon">📸</div>
+                  <div class="upload-text"><strong>Click to upload payment screenshot</strong> or drag &amp; drop</div>
+                  <div class="upload-sub">Supports JPG, PNG, WEBP, or PDF (max 10MB)</div>
+                </div>
+                <div class="upload-preview" id="proofPreview" hidden>
+                  <img id="proofThumb" class="preview-img" alt="Receipt preview">
+                  <div class="preview-meta">
+                    <span id="proofFileName" class="preview-name">receipt.png</span>
+                    <span id="proofFileSize" class="preview-size">240 KB</span>
+                    <button type="button" class="btn-replace" id="btnChangeProof">Choose Different Screenshot</button>
+                  </div>
+                </div>
+              </div>
+              <p class="err" data-err="paymentProof" role="alert"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <label class="consent">
       <input type="checkbox" id="consent">
-      <span>The details above are correct, and my team meets the eligibility rules published on Unstop. I agree to the <a href="/terms.html" data-policy="terms">Terms &amp; Conditions</a> and understand that the ₹<span class="fee-inline">400</span> total amount (including registration and any booked accommodation charges) is <a href="/refunds.html" data-policy="refunds">non-refundable</a> once paid.</span>
+      <span>The details above are correct, and my team meets the eligibility rules published on Unstop. I confirm that I have completed the ₹<span class="fee-inline">400</span> payment on the university portal and attached the genuine payment screenshot. I agree to the <a href="/terms.html" data-policy="terms">Terms &amp; Conditions</a> and understand that the fee is <a href="/refunds.html" data-policy="refunds">non-refundable</a>.</span>
     </label>
     <p class="err" data-err="consent" role="alert"></p>
 
     <p class="err form-err" id="formErr" role="alert"></p>
-    <button type="submit" class="pay" id="pay">Pay ₹<span class="fee-inline">400</span> and register</button>
-    <p class="secure">Payments are handled by Razorpay (UPI, cards, net banking, wallets). We never see your card details.</p>
+    <button type="submit" class="pay" id="pay">Complete Registration &amp; Get RSVP Pass</button>
+    <p class="secure">🔒 Instant validation: Your RSVP QR Pass &amp; Tax Invoice PDF are generated immediately and emailed to your whole team.</p>
   </form>
 
   <aside class="side">
@@ -205,7 +258,7 @@
   <div style="margin:16px 0 6px;">
     <span style="background:var(--indigo);color:#fff;padding:6px 18px;border-radius:20px;font-size:16px;font-weight:700;display:inline-block;letter-spacing:0.5px">TEAM #<span id="doneTeamId">001</span></span>
   </div>
-  <p class="code">Registration ID <b id="doneCode"></b></p>
+  <p class="code">Registration ID <b id="doneCode"></b> <span style="margin:0 8px;opacity:0.4">|</span> Txn ID: <b id="doneTxn" style="font-family:monospace;letter-spacing:0.5px"></b></p>
   <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:18px 0;">
     <a class="pay dl" id="dl" download style="margin:0">📥 Download RSVP Pass (PNG)</a>
     <a class="pay dl" id="dlPdf" download style="margin:0;background:var(--indigo)" hidden>🧾 Download Official Invoice (PDF)</a>
@@ -249,7 +302,6 @@
   </div>
 </dialog>
 
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="/app.js"></script>
 </body>
 </html>

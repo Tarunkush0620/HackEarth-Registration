@@ -110,13 +110,9 @@
     document.querySelectorAll('.fee-inline').forEach((n) => (n.textContent = totalFee.toLocaleString('en-IN')));
     const btn = $('#pay');
     if (btn && !btn.disabled) {
-      let label = `Pay ₹${totalFee.toLocaleString('en-IN')} and register`;
-      if (allFemale && needStay) {
-        label += ` (All-Women Discount + Stay for ${stayCount})`;
-      } else if (allFemale) {
-        label += ` (All-Women Discount Applied)`;
-      } else if (needStay) {
-        label += ` (Incl. Stay for ${stayCount})`;
+      let label = `Complete Registration (₹${totalFee.toLocaleString('en-IN')}) & Get RSVP Pass`;
+      if (allFemale && !needStay) {
+        label = `Complete Registration (₹200 · All-Women Discount) & Get RSVP Pass`;
       }
       btn.textContent = label;
       btn.dataset.label = label;
@@ -308,6 +304,122 @@
     }
   }
 
+  /* ---------- Payment proof upload handler ---------- */
+  let proofBase64 = '';
+
+  function formatBytes(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  function handleProofFile(file) {
+    if (!file) return;
+    const errSlot = document.querySelector('[data-err="paymentProof"]');
+    if (errSlot) errSlot.textContent = '';
+
+    if (file.size > 10 * 1024 * 1024) {
+      if (errSlot) errSlot.textContent = 'File is too large. Please upload an image under 10MB.';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const rawData = e.target.result;
+      const isImg = file.type.startsWith('image/');
+
+      if (isImg) {
+        const img = new Image();
+        img.onload = () => {
+          const maxDim = 1600;
+          let w = img.width;
+          let h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          proofBase64 = canvas.toDataURL('image/jpeg', 0.85);
+
+          const thumb = $('#proofThumb');
+          if (thumb) thumb.src = proofBase64;
+          const nameEl = $('#proofFileName');
+          if (nameEl) nameEl.textContent = file.name;
+          const sizeEl = $('#proofFileSize');
+          if (sizeEl) sizeEl.textContent = formatBytes(file.size);
+          const promptEl = $('#uploadPrompt');
+          if (promptEl) promptEl.hidden = true;
+          const prevEl = $('#proofPreview');
+          if (prevEl) prevEl.hidden = false;
+        };
+        img.src = rawData;
+      } else {
+        proofBase64 = rawData;
+        const thumb = $('#proofThumb');
+        if (thumb) thumb.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="%23b8337f"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>';
+        const nameEl = $('#proofFileName');
+        if (nameEl) nameEl.textContent = file.name;
+        const sizeEl = $('#proofFileSize');
+        if (sizeEl) sizeEl.textContent = formatBytes(file.size);
+        const promptEl = $('#uploadPrompt');
+        if (promptEl) promptEl.hidden = true;
+        const prevEl = $('#proofPreview');
+        if (prevEl) prevEl.hidden = false;
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  const fileInput = $('#paymentProof');
+  if (fileInput) {
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file) handleProofFile(file);
+    });
+  }
+
+  const btnChange = $('#btnChangeProof');
+  if (btnChange) {
+    btnChange.addEventListener('click', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      proofBase64 = '';
+      if (fileInput) fileInput.value = '';
+      const prevEl = $('#proofPreview');
+      if (prevEl) prevEl.hidden = true;
+      const promptEl = $('#uploadPrompt');
+      if (promptEl) promptEl.hidden = false;
+      if (fileInput) fileInput.click();
+    });
+  }
+
+  const dropzone = $('#proofDropzone');
+  if (dropzone) {
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      const file = e.dataTransfer.files && e.dataTransfer.files[0];
+      if (file) {
+        if (fileInput) fileInput.files = e.dataTransfer.files;
+        handleProofFile(file);
+      }
+    });
+  }
+
   /* ---------- collect + submit ---------- */
   function collect() {
     const needStay = ($('input[name=needStay]:checked') || {}).value === 'yes';
@@ -333,6 +445,8 @@
       stayCount,
       ideaTitle: ($('#ideaTitle') || {}).value || '',
       track: trackVal,
+      txnId: ($('#txnId') || {}).value ? $('#txnId').value.trim() : '',
+      paymentProof: proofBase64 || '',
       leaderPhone,
       emergencyName: ($('#emergencyName') || {}).value || '',
       emergencyRelation: ($('#emergencyRelation') || {}).value || '',
@@ -351,6 +465,7 @@
 
   function setBusy(b, label) {
     const btn = $('#pay');
+    if (!btn) return;
     btn.disabled = b;
     if (!btn.dataset.label) btn.dataset.label = btn.innerHTML;
     btn.innerHTML = b ? label : btn.dataset.label || btn.innerHTML;
@@ -360,75 +475,37 @@
     e.preventDefault();
     clearErrors();
     const body = collect();
-    setBusy(true, 'Preparing payment…');
+
+    // Instant client validation for required fields
+    const clientErrors = {};
+    if (!body.txnId || body.txnId.length < 5) {
+      clientErrors.txnId = 'Enter your Paytm Transaction ID or 12-digit UPI UTR number.';
+    }
+    if (!body.paymentProof) {
+      clientErrors.paymentProof = 'Please upload a screenshot of your payment receipt.';
+    }
+    if (!body.consent) {
+      clientErrors.consent = 'Please confirm to continue.';
+    }
+    if (Object.keys(clientErrors).length > 0) {
+      return showErrors(clientErrors);
+    }
+
+    setBusy(true, 'Verifying payment & generating RSVP pass…');
     try {
       const res = await post('/api/create-order', body);
       if (!res.ok) {
         setBusy(false);
-        if (res.data.errors) return showErrors(res.data.errors);
-        $('#formErr').textContent = res.data.error || 'Something went wrong. Please try again.';
+        if (res.data && res.data.errors) return showErrors(res.data.errors);
+        $('#formErr').textContent = (res.data && (res.data.error || res.data.message)) || 'Something went wrong. Please check your details and try again.';
         return;
       }
-      openCheckout(res.data, body);
+      showDone(res.data);
     } catch {
       setBusy(false);
       $('#formErr').textContent = 'Network problem. Check your connection and try again.';
     }
   });
-
-  function openCheckout(o, body) {
-    if (o.mock) {
-      setBusy(true, 'Simulating test payment…');
-      setTimeout(async () => {
-        try {
-          const v = await post('/api/verify-payment', {
-            razorpay_order_id: o.orderId,
-            razorpay_payment_id: 'pay_mock_' + Date.now(),
-            razorpay_signature: 'mock_sig',
-          });
-          if (v.ok) return showDone(v.data);
-          $('#formErr').textContent = v.data.error || 'Could not confirm the payment.';
-        } catch {
-          $('#formErr').textContent = 'Payment simulation error.';
-        }
-        setBusy(false);
-      }, 1000);
-      return;
-    }
-    if (!window.Razorpay) {
-      setBusy(false);
-      $('#formErr').textContent = 'The payment window could not load. Check your connection and try again.';
-      return;
-    }
-    const rzp = new Razorpay({
-      key: o.keyId,
-      amount: o.amount,
-      currency: o.currency,
-      order_id: o.orderId,
-      name: 'WIE HackEarth 2.0',
-      description: `Team registration · ${body.teamName}`,
-      prefill: o.prefill,
-      notes: { reg_code: o.regCode },
-      theme: { color: '#33266b' },
-      modal: { ondismiss: () => setBusy(false) },
-      handler: async (resp) => {
-        setBusy(true, 'Confirming your payment…');
-        try {
-          const v = await post('/api/verify-payment', resp);
-          if (v.ok) return showDone(v.data);
-          $('#formErr').textContent = v.data.error || 'Could not confirm the payment.';
-        } catch {
-          $('#formErr').textContent = 'Payment received but confirmation was interrupted. Your email will arrive shortly. Do not pay again.';
-        }
-        setBusy(false);
-      },
-    });
-    rzp.on('payment.failed', (r) => {
-      setBusy(false);
-      $('#formErr').textContent = (r.error && r.error.description) || 'The payment failed. You can try again.';
-    });
-    rzp.open();
-  }
 
   function showDone(d) {
     $('.layout').hidden = true;
@@ -441,6 +518,7 @@
     $('#qrImg').src = d.qr;
     if ($('#doneTeamId')) $('#doneTeamId').textContent = teamIdStr;
     $('#doneCode').textContent = d.regCode;
+    if ($('#doneTxn')) $('#doneTxn').textContent = d.paytmTxnId || ($('#txnId') ? $('#txnId').value.trim() : 'Confirmed');
     $('#dl').href = d.qr;
     $('#dl').setAttribute('download', `HackEarth-RSVP-Team${teamIdStr}-${d.regCode}.png`);
 

@@ -167,10 +167,18 @@
 
         <!-- 4. Payment & Billing Audit -->
         <div class="r-callout payment" id="rPaymentCallout">
-          <b>💳 Payment & Settlement Audit</b>
+          <b>💳 Payment &amp; Settlement Audit</b>
           <div class="r-grid" style="margin-top:4px;">
             <div class="r-data-item"><b>Total Paid</b><span id="rAmountPaid" style="font-weight:700; color:#166534;"></span></div>
-            <div class="r-data-item"><b>Payment ID</b><span id="rPaymentId" style="font-family:monospace; font-size:11.5px;"></span></div>
+            <div class="r-data-item"><b>Paytm Txn / UTR</b><span id="rPaymentId" style="font-family:monospace; font-size:11.5px;"></span></div>
+            <div class="r-data-item" id="rProofBox" style="grid-column: 1 / -1; margin-top: 6px;" hidden>
+              <b>Payment Screenshot Proof</b>
+              <div style="margin-top:4px;">
+                <a id="rProofLink" target="_blank" rel="noopener noreferrer" style="color:var(--magenta);font-weight:600;text-decoration:underline;cursor:pointer;">
+                  🖼️ View Uploaded Payment Receipt ↗
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 

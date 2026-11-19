@@ -328,7 +328,20 @@
       // Payment Audit
       const feeInr = d.amountInr || (d.amountPaise ? Math.round(d.amountPaise / 100) : 0);
       $('#rAmountPaid').textContent = feeInr ? `₹${feeInr.toLocaleString('en-IN')} (Settled)` : 'Settled';
-      $('#rPaymentId').textContent = d.razorpayPaymentId || d.razorpayOrderId || 'Settled';
+      $('#rPaymentId').textContent = d.paytmTxnId || d.razorpayPaymentId || d.razorpayOrderId || 'Settled';
+
+      const proofBox = $('#rProofBox');
+      const proofLink = $('#rProofLink');
+      const screenshot = d.paymentScreenshot || (d.members && d.members[0] && d.members[0].payment_screenshot);
+      if (proofBox && proofLink) {
+        if (screenshot) {
+          proofBox.hidden = false;
+          proofLink.href = screenshot;
+        } else {
+          proofBox.hidden = true;
+          proofLink.href = '#';
+        }
+      }
 
       // Organiser Audit Stamp
       if (d.checkedIn) {
