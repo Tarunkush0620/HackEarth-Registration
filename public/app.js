@@ -446,6 +446,7 @@
       ideaTitle: ($('#ideaTitle') || {}).value || '',
       track: trackVal,
       txnId: ($('#txnId') || {}).value ? $('#txnId').value.trim() : '',
+      utrNumber: ($('#utrNumber') || {}).value ? $('#utrNumber').value.trim() : '',
       paymentProof: proofBase64 || '',
       leaderPhone,
       emergencyName: ($('#emergencyName') || {}).value || '',
@@ -478,8 +479,17 @@
 
     // Instant client validation for required fields
     const clientErrors = {};
-    if (!body.txnId || body.txnId.length < 5) {
+    const txn = body.txnId;
+    const utr = body.utrNumber;
+    if (!txn && !utr) {
       clientErrors.txnId = 'Enter your Paytm Transaction ID or 12-digit UPI UTR number.';
+    } else {
+      if (txn && txn.length < 5) {
+        clientErrors.txnId = 'Transaction ID should be at least 5 characters.';
+      }
+      if (utr && utr.length < 6) {
+        clientErrors.utrNumber = 'UPI UTR should be at least 6 characters.';
+      }
     }
     if (!body.paymentProof) {
       clientErrors.paymentProof = 'Please upload a screenshot of your payment receipt.';
@@ -518,7 +528,8 @@
     $('#qrImg').src = d.qr;
     if ($('#doneTeamId')) $('#doneTeamId').textContent = teamIdStr;
     $('#doneCode').textContent = d.regCode;
-    if ($('#doneTxn')) $('#doneTxn').textContent = d.paytmTxnId || ($('#txnId') ? $('#txnId').value.trim() : 'Confirmed');
+    const refParts = [d.paytmTxnId || ($('#txnId') ? $('#txnId').value.trim() : ''), d.utrNumber || ($('#utrNumber') ? $('#utrNumber').value.trim() : '')].filter(Boolean);
+    if ($('#doneTxn')) $('#doneTxn').textContent = refParts.length ? refParts.join(' / UTR: ') : 'Confirmed';
     $('#dl').href = d.qr;
     $('#dl').setAttribute('download', `HackEarth-RSVP-Team${teamIdStr}-${d.regCode}.png`);
 

@@ -12,3 +12,4 @@ module.exports = async (req, res) => {
     return json(res, 500, { error: 'Registration could not be completed. Please check your details and try again.' });
   }
 };
+

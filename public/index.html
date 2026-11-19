@@ -177,35 +177,51 @@
       <div class="paytm-step">
         <div class="step-badge">2</div>
         <div class="step-body">
-          <div class="step-title">Enter Transaction ID &amp; Upload Receipt</div>
-          <div class="grid2" style="margin-top:10px;">
-            <div class="field full-col">
-              <label for="txnId">Paytm Transaction ID or 12-digit UPI UTR / Ref <span class="req">*</span></label>
-              <input id="txnId" name="txnId" required placeholder="e.g. 20260219... or 12-digit UPI Ref Number" autocomplete="off" data-field="txnId">
-              <p class="hint">Available on your Paytm order history, UPI receipt, or SMS confirmation.</p>
-              <p class="err" data-err="txnId" role="alert"></p>
-            </div>
+          <div class="step-title">Paytm Transaction ID</div>
+          <div class="field" style="margin-top:8px;">
+            <label for="txnId">Paytm Transaction ID <span class="req">*</span></label>
+            <input id="txnId" name="txnId" placeholder="e.g. 20260219... (from Paytm order history / SMS)" autocomplete="off" data-field="txnId">
+            <p class="hint">Available on your Paytm payment confirmation receipt or SMS.</p>
+            <p class="err" data-err="txnId" role="alert"></p>
+          </div>
+        </div>
+      </div>
 
-            <div class="field full-col">
-              <label for="paymentProof">Payment Screenshot / Receipt <span class="req">*</span></label>
-              <div class="upload-zone" id="proofDropzone">
-                <input type="file" id="paymentProof" name="paymentProof" accept="image/*,.pdf" class="file-hidden" data-field="paymentProof">
-                <div class="upload-prompt" id="uploadPrompt">
-                  <div class="upload-icon">📸</div>
-                  <div class="upload-text"><strong>Click to upload payment screenshot</strong> or drag &amp; drop</div>
-                  <div class="upload-sub">Supports JPG, PNG, WEBP, or PDF (max 10MB)</div>
-                </div>
-                <div class="upload-preview" id="proofPreview" hidden>
-                  <img id="proofThumb" class="preview-img" alt="Receipt preview">
-                  <div class="preview-meta">
-                    <span id="proofFileName" class="preview-name">receipt.png</span>
-                    <span id="proofFileSize" class="preview-size">240 KB</span>
-                    <button type="button" class="btn-replace" id="btnChangeProof">Choose Different Screenshot</button>
-                  </div>
+      <div class="paytm-step">
+        <div class="step-badge">3</div>
+        <div class="step-body">
+          <div class="step-title">UPI Ref / UTR Number</div>
+          <div class="field" style="margin-top:8px;">
+            <label for="utrNumber">12-Digit UPI UTR / Ref Number <span class="opt">required if paid via UPI</span></label>
+            <input id="utrNumber" name="utrNumber" placeholder="e.g. 12-digit UPI Ref Number (e.g. 405234123456)" autocomplete="off" data-field="utrNumber">
+            <p class="hint">12-digit UTR number from Google Pay, PhonePe, Paytm UPI, or bank SMS.</p>
+            <p class="err" data-err="utrNumber" role="alert"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="paytm-step">
+        <div class="step-badge">4</div>
+        <div class="step-body">
+          <div class="step-title">Upload Payment Screenshot / Receipt</div>
+          <div class="field" style="margin-top:8px;">
+            <div class="upload-zone" id="proofDropzone">
+              <input type="file" id="paymentProof" name="paymentProof" accept="image/*,.pdf" class="file-hidden" data-field="paymentProof">
+              <div class="upload-prompt" id="uploadPrompt">
+                <div class="upload-icon">📸</div>
+                <div class="upload-text"><strong>Click to upload payment screenshot</strong> or drag &amp; drop</div>
+                <div class="upload-sub">Supports JPG, PNG, WEBP, or PDF (max 10MB)</div>
+              </div>
+              <div class="upload-preview" id="proofPreview" hidden>
+                <img id="proofThumb" class="preview-img" alt="Receipt preview">
+                <div class="preview-meta">
+                  <span id="proofFileName" class="preview-name">receipt.png</span>
+                  <span id="proofFileSize" class="preview-size">240 KB</span>
+                  <button type="button" class="btn-replace" id="btnChangeProof">Choose Different Screenshot</button>
                 </div>
               </div>
-              <p class="err" data-err="paymentProof" role="alert"></p>
             </div>
+            <p class="err" data-err="paymentProof" role="alert"></p>
           </div>
         </div>
       </div>

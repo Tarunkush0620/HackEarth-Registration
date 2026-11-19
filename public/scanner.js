@@ -328,7 +328,8 @@
       // Payment Audit
       const feeInr = d.amountInr || (d.amountPaise ? Math.round(d.amountPaise / 100) : 0);
       $('#rAmountPaid').textContent = feeInr ? `₹${feeInr.toLocaleString('en-IN')} (Settled)` : 'Settled';
-      $('#rPaymentId').textContent = d.paytmTxnId || d.razorpayPaymentId || d.razorpayOrderId || 'Settled';
+      const refParts = [d.paytmTxnId, d.utrNumber ? `UTR: ${d.utrNumber}` : ''].filter(Boolean);
+      $('#rPaymentId').textContent = refParts.length ? refParts.join(' • ') : (d.razorpayPaymentId || d.razorpayOrderId || 'Settled');
 
       const proofBox = $('#rProofBox');
       const proofLink = $('#rProofLink');
