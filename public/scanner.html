@@ -18,17 +18,24 @@
 
 <!-- Organiser Passcode / PIN Gate -->
 <section id="login" class="login" hidden>
-  <h1 class="mark big"><span class="wie">WIE</span> HackEarth<svg class="leaf"><use href="#leaf"/></svg></h1>
-  <p><span class="pill">2.0 · 2026</span></p>
-  <p class="lead">Organiser Entry Desk & Participant Database</p>
+  <div class="login-brand">
+    <h1 class="mark big"><span class="wie">WIE</span> HackEarth<svg class="leaf"><use href="#leaf"/></svg></h1>
+    <p><span class="pill">2.0 · 2026</span></p>
+    <p class="lead">Organiser Entry Desk &amp; Participant Database</p>
+  </div>
 
-  <form id="loginForm" class="panel">
+  <form id="loginForm" class="panel login-panel">
     <label for="passcode">Enter Organiser PIN</label>
-    <input id="passcode" type="password" placeholder="Enter PIN" maxlength="12" autocomplete="current-password" required>
+    <div class="pin-input-wrap">
+      <input id="passcode" type="password" placeholder="Enter PIN (e.g. 2601)" maxlength="12" autocomplete="current-password" inputmode="numeric" required>
+    </div>
     <p class="err" id="loginErr" role="alert"></p>
-    <button class="btn" type="submit">Unlock Portal</button>
+    <button class="btn btn-unlock" type="submit">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+      <span>Unlock Entry Desk</span>
+    </button>
   </form>
-  <p class="org">IEEE Women in Engineering · Galgotias University</p>
+  <p class="org">IEEE Women in Engineering · Student Branch Entry Desk</p>
 </section>
 
 <!-- Organiser App -->
@@ -36,28 +43,53 @@
   <header class="top">
     <div class="brand">
       <span class="mark"><span class="wie">WIE</span> HackEarth<svg class="leaf"><use href="#leaf"/></svg></span>
-      <span class="pill sm">2.0 · 2026</span>
+      <span class="pill sm">2.0</span>
     </div>
     <div class="top-right">
-      <span class="current-org" id="currentOrgBadge">👤 <span id="currentOrgName">Organiser</span></span>
-      <button class="link" id="logout" type="button">Lock</button>
+      <div class="current-org" id="currentOrgBadge" title="Logged-in Organiser">
+        <span class="org-icon" id="currentOrgIcon">👤</span>
+        <div class="org-details">
+          <span class="org-name" id="currentOrgName">Organiser</span>
+          <span class="org-role-tag" id="currentOrgRole">Admin</span>
+        </div>
+      </div>
+      <button class="btn-lock" id="logout" type="button" title="Lock Portal" aria-label="Lock portal">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <span class="lock-label">Lock</span>
+      </button>
     </div>
   </header>
 
+  <!-- Live Operations Dashboard -->
   <div class="progress">
-    <div class="count-row">
-      <p class="count" aria-live="polite"><b id="cIn">0</b> of <b id="cAll">0</b> teams admitted</p>
-      <div class="extra-stats">
-        <span class="extra-pill highlight" id="badgeStay">0 Stay Booked</span>
-        <span class="extra-pill" id="badgeWomen">0 All-Women</span>
+    <div class="progress-card">
+      <div class="count-row">
+        <div class="count-box">
+          <span class="count-label">Teams Admitted</span>
+          <p class="count" aria-live="polite"><b id="cIn">0</b> <span class="count-sep">/</span> <span class="count-total" id="cAll">0</span></p>
+        </div>
+        <div class="extra-stats">
+          <span class="extra-pill highlight" id="badgeStay">🏨 0 Stay Booked</span>
+          <span class="extra-pill women" id="badgeWomen">★ 0 All-Women</span>
+        </div>
+      </div>
+      <div class="meter-wrap">
+        <div class="meter" aria-hidden="true"><i id="meterFill"></i></div>
+        <span class="meter-pct" id="meterPct">0%</span>
       </div>
     </div>
-    <div class="meter" aria-hidden="true"><i id="meterFill"></i></div>
   </div>
 
+  <!-- Segmented Tab Navigation -->
   <nav class="tabs" role="tablist">
-    <button role="tab" id="tabScan" aria-selected="true" aria-controls="paneScan">📷 Scan QR Pass</button>
-    <button role="tab" id="tabFind" aria-selected="false" aria-controls="paneFind">🔍 Search Participant Database</button>
+    <button role="tab" id="tabScan" aria-selected="true" aria-controls="paneScan">
+      <span class="tab-icon">📷</span>
+      <span class="tab-text">Scan Pass</span>
+    </button>
+    <button role="tab" id="tabFind" aria-selected="false" aria-controls="paneFind">
+      <span class="tab-icon">🔍</span>
+      <span class="tab-text">Search Database</span>
+    </button>
   </nav>
 
   <main>
@@ -68,31 +100,44 @@
         <div class="frame" aria-hidden="true">
           <i class="c tl"></i><i class="c tr"></i>
           <i class="c bl"></i><i class="c br"></i>
+          <div class="scan-laser"></div>
         </div>
         <p class="cam-msg" id="camMsg">Starting camera…</p>
       </div>
-      <p class="tip">Point camera at the participant’s RSVP QR pass. Instant verification.</p>
+      
+      <p class="tip">Point phone camera at participant RSVP QR pass for instant check-in.</p>
       
       <div class="alt-actions">
-        <div>
-          <label class="btn ghost sm" for="photo" style="width:100%; cursor:pointer;">📁 Scan from Photo / Screenshot</label>
-          <input id="photo" type="file" accept="image/*" hidden>
-        </div>
+        <div class="alt-divider"><span>or verify manually</span></div>
 
         <form id="manualForm" class="manual-box">
-          <input id="manualCode" type="text" placeholder="HE26-XXXXXX" maxlength="11" autocomplete="off" spellcheck="false">
+          <div class="manual-input-wrap">
+            <span class="manual-prefix">HE26-</span>
+            <input id="manualCode" type="text" placeholder="XXXXXX" maxlength="11" autocomplete="off" spellcheck="false" inputmode="text">
+          </div>
           <button class="btn sm" type="submit">Verify Code</button>
         </form>
+
+        <div>
+          <label class="btn ghost sm btn-photo-upload" for="photo">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            <span>Scan from Photo / Screenshot</span>
+          </label>
+          <input id="photo" type="file" accept="image/*" hidden>
+        </div>
       </div>
     </section>
 
     <!-- Pane 2: Full Database Search -->
     <section id="paneFind" role="tabpanel" aria-labelledby="tabFind" hidden>
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; gap:10px; flex-wrap:wrap;">
-        <label for="q" style="margin:0; font-weight:700; font-size:14px; color:var(--indigo);">Participant Master Database</label>
-        <button id="btnExportCsv" class="btn ghost sm" type="button" style="border-radius:10px; font-weight:600; padding:6px 14px; font-size:13px;">📥 Export Master CSV</button>
+      <div class="search-header-bar">
+        <label for="q" class="search-label">Participant Master Database</label>
+        <button id="btnExportCsv" class="btn ghost sm btn-export-csv" type="button">📥 Export CSV</button>
       </div>
-      <input id="q" type="search" placeholder="Search Team ID (e.g. 001), team name, roll number, college, phone..." autocomplete="off">
+      <div class="search-input-wrap">
+        <svg class="search-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input id="q" type="search" placeholder="Search Team ID (e.g. 001), team name, roll #, phone..." autocomplete="off">
+      </div>
       <ul id="results" class="results"></ul>
       <p class="tip" id="findTip">Search any detail: Team Name, Member Roll Number, Idea Title, College, Phone, Email, or HE26 Code.</p>
     </section>
@@ -110,9 +155,9 @@
       <p class="r-status" id="rTitle"></p>
 
       <div class="r-card" id="rCard">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
-          <span class="pill" id="rTeamIdBadge" style="background:var(--indigo);color:#fff;font-weight:700;font-size:13px;padding:3px 10px;border-radius:10px;">Team #001</span>
-          <p class="r-label" style="margin:0;">Verified Record</p>
+        <div class="r-card-head">
+          <span class="pill" id="rTeamIdBadge">Team #001</span>
+          <p class="r-label">Verified Record</p>
         </div>
         <h2 class="r-team" id="rTeam"></h2>
         
@@ -131,13 +176,13 @@
         <div class="r-section">
           <div class="r-section-title">
             <span>Project & College Profile</span>
-            <span style="font-family:monospace; font-size:12px; color:var(--magenta);" id="rCode"></span>
+            <span class="r-code-badge" id="rCode"></span>
           </div>
           <div class="r-grid">
             <div class="r-data-item"><b>Track</b><span id="rTrackFull"></span></div>
             <div class="r-data-item"><b>Unstop Team ID</b><span id="rUnstopId">N/A</span></div>
-            <div class="r-data-item" style="grid-column: 1 / -1;"><b>Project / Idea Title</b><span id="rIdeaTitle" style="font-weight:600; color:var(--indigo);"></span></div>
-            <div class="r-data-item" style="grid-column: 1 / -1;"><b>College & City</b><span id="rCollegeFull"></span></div>
+            <div class="r-data-item full"><b>Project / Idea Title</b><span id="rIdeaTitle" class="r-idea"></span></div>
+            <div class="r-data-item full"><b>College & City</b><span id="rCollegeFull"></span></div>
           </div>
         </div>
 
@@ -147,34 +192,38 @@
           <div class="r-grid">
             <div class="r-data-item">
               <b>Team Leader</b>
-              <span id="rLeaderName" style="font-weight:600;"></span><br>
-              📞 <a id="rLeaderPhone" style="color:var(--indigo); text-decoration:underline;"></a><br>
-              ✉️ <a id="rLeaderEmail" style="color:var(--soft); font-size:12px;"></a>
+              <span id="rLeaderName" style="font-weight:600;"></span>
+              <div class="contact-links">
+                <a id="rLeaderPhone" class="btn-call-pill">📞 <span class="phone-txt">Call Leader</span></a>
+                <a id="rLeaderEmail" class="mail-link"></a>
+              </div>
             </div>
             <div class="r-data-item">
               <b style="color:#9d174d;">🚨 Emergency (Parent / Guardian)</b>
-              <span id="rEmergencyName" style="font-weight:600; color:#9d174d;"></span><br>
-              📞 <a id="rEmergencyPhone" style="color:#9d174d; text-decoration:underline; font-weight:600;"></a>
+              <span id="rEmergencyName" style="font-weight:600; color:#9d174d;"></span>
+              <div class="contact-links">
+                <a id="rEmergencyPhone" class="btn-call-pill emergency">📞 <span class="phone-txt">Call Guardian</span></a>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- 3. Accommodation & University Shuttle Callout -->
+        <!-- 3. Accommodation & Shuttle Callout -->
         <div class="r-callout stay" id="rStayCallout" hidden>
           <b>🏨 Official Accommodation & Shuttle Pass</b>
           <span id="rStayDetails"></span>
         </div>
 
-        <!-- 4. Payment & Billing Audit -->
+        <!-- 4. Payment & Settlement Audit -->
         <div class="r-callout payment" id="rPaymentCallout">
           <b>💳 Payment &amp; Settlement Audit</b>
           <div class="r-grid" style="margin-top:4px;">
             <div class="r-data-item"><b>Total Paid</b><span id="rAmountPaid" style="font-weight:700; color:#166534;"></span></div>
-            <div class="r-data-item"><b>Paytm Txn / UTR</b><span id="rPaymentId" style="font-family:monospace; font-size:11.5px;"></span></div>
-            <div class="r-data-item" id="rProofBox" style="grid-column: 1 / -1; margin-top: 6px;" hidden>
+            <div class="r-data-item"><b>Paytm Txn / UTR</b><span id="rPaymentId" class="mono-id"></span></div>
+            <div class="r-data-item full" id="rProofBox" style="margin-top:6px;" hidden>
               <b>Payment Screenshot Proof</b>
               <div style="margin-top:4px;">
-                <a id="rProofLink" target="_blank" rel="noopener noreferrer" style="color:var(--magenta);font-weight:600;text-decoration:underline;cursor:pointer;">
+                <a id="rProofLink" target="_blank" rel="noopener noreferrer" class="proof-link">
                   🖼️ View Uploaded Payment Receipt ↗
                 </a>
               </div>
@@ -182,7 +231,7 @@
           </div>
         </div>
 
-        <!-- 5. Complete Members Checklist with Roll Number & Presence (Present / Absent) -->
+        <!-- 5. Complete Members Checklist with Presence Toggle -->
         <div class="r-section" style="margin-bottom:0;">
           <div class="attendance-header-bar">
             <span class="attendance-summary-text" id="attSummaryText">👥 Members Present: <b id="rPresentCount">0</b> / <b id="rTotalMembers">0</b></span>
@@ -199,8 +248,8 @@
       <p class="r-note" id="rNote"></p>
 
       <div class="r-actions">
-        <button class="btn edit-btn" id="rEdit" type="button" hidden>✏️ Edit & Manage Record (Super Admin)</button>
-        <button class="btn light" id="rNext" type="button">Scan Next Team</button>
+        <button class="btn light r-btn-next" id="rNext" type="button">📷 Scan Next Team</button>
+        <button class="btn edit-btn" id="rEdit" type="button" hidden>✏️ Edit Record (Super Admin)</button>
         <button class="btn outline" id="rUndo" type="button" hidden>Undo Check-In</button>
       </div>
     </div>
@@ -300,8 +349,6 @@
       </form>
     </div>
   </div>
-    </div>
-  </section>
 </div>
 
 <canvas id="grab" hidden></canvas>

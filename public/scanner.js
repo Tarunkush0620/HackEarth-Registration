@@ -59,15 +59,16 @@
 
     const badge = $('#currentOrgBadge');
     const orgSpan = $('#currentOrgName');
-    if (badge && orgSpan) {
-      if (currentRole === 'super_admin') {
-        badge.className = 'current-org super-admin-badge';
-        orgSpan.textContent = `👑 ${currentOrg} (Super Admin)`;
-      } else {
-        badge.className = 'current-org viewer-badge';
-        orgSpan.textContent = `👤 ${currentOrg} (View Only)`;
-      }
+    const orgIcon = $('#currentOrgIcon');
+    const orgRole = $('#currentOrgRole');
+    const isSuper = currentRole === 'super_admin';
+
+    if (badge) {
+      badge.className = `current-org ${isSuper ? 'super-admin-badge' : 'viewer-badge'}`;
     }
+    if (orgIcon) orgIcon.textContent = isSuper ? '👑' : '👤';
+    if (orgSpan) orgSpan.textContent = currentOrg;
+    if (orgRole) orgRole.textContent = isSuper ? 'Super Admin' : 'Viewer';
 
     $('#login').hidden = true;
     $('#app').hidden = false;
@@ -114,8 +115,9 @@
         $('#cAll').textContent = data.paid || 0;
         const pct = data.paid ? Math.round(100 * data.checkedIn / data.paid) : 0;
         $('#meterFill').style.width = pct + '%';
-        if ($('#badgeStay')) $('#badgeStay').textContent = `${data.stayTeams || 0} Stay Booked`;
-        if ($('#badgeWomen')) $('#badgeWomen').textContent = `${data.allFemale || 0} All-Women`;
+        if ($('#meterPct')) $('#meterPct').textContent = pct + '%';
+        if ($('#badgeStay')) $('#badgeStay').textContent = `🏨 ${data.stayTeams || 0} Stay Booked`;
+        if ($('#badgeWomen')) $('#badgeWomen').textContent = `★ ${data.allFemale || 0} All-Women`;
       }
     } catch {}
   }
@@ -240,8 +242,11 @@
   /* Manual Code Form */
   $('#manualForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const code = $('#manualCode').value.trim();
+    let code = $('#manualCode').value.trim().toUpperCase();
     if (!code) return;
+    if (!code.startsWith('HE26-') && !code.startsWith('HE26.')) {
+      code = `HE26-${code}`;
+    }
     busy = true;
     await submit({ code });
   });
