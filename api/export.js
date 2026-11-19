@@ -59,7 +59,10 @@ module.exports = async (req, res) => {
       'Member 4 Roll No',
       'Member 4 Mobile',
       'Member 4 Attendance',
-      'Razorpay Payment ID',
+      'Paytm Transaction ID',
+      'UPI UTR Number',
+      'Payment Screenshot Proof',
+      'Payment Settlement Ref',
     ];
 
     const lines = [headers.join(',')];
@@ -114,6 +117,9 @@ module.exports = async (req, res) => {
         csvCell(m4.rollNumber || ''),
         csvCell(m4.phone || ''),
         csvCell(attStr(m4)),
+        csvCell(r.paytmTxnId || ''),
+        csvCell(r.utrNumber || ''),
+        csvCell(r.paymentScreenshot || ''),
         csvCell(r.razorpayPaymentId || ''),
       ];
       lines.push(row.join(','));
