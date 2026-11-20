@@ -697,6 +697,7 @@ main {
 .result.ok { background: var(--ok); }
 .result.already { background: var(--warn); }
 .result.bad { background: var(--bad); }
+.result.view { background: #2563eb; }
 
 .result-in {
   position: relative;
@@ -721,6 +722,7 @@ main {
 .result.ok .r-icon { color: var(--ok); }
 .result.already .r-icon { color: var(--warn); }
 .result.bad .r-icon { color: var(--bad); }
+.result.view .r-icon { color: #2563eb; }
 
 .r-status {
   margin: 0 0 12px;

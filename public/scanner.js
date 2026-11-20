@@ -140,6 +140,7 @@
   }
 
   function feel(kind) {
+    if (kind === 'view') return;
     if (kind === 'ok') {
       beep(880, 160);
       setTimeout(() => beep(1174, 180), 90);
@@ -271,19 +272,21 @@
     ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l5 5 10-11"/></svg>',
     already: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M12 5v9"/><circle cx="12" cy="19" r="0.6"/></svg>',
     bad: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    view: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>',
   };
 
   function showResult(d) {
     currentRecord = d;
     const el = $('#result');
     const title = $('#rTitle'), team = $('#rTeam'), mem = $('#rMembers'), note = $('#rNote');
-    const undo = $('#rUndo'), editBtn = $('#rEdit');
+    const undo = $('#rUndo'), editBtn = $('#rEdit'), manualAdmit = $('#rManualAdmit');
     const womenBadge = $('#rWomenBadge'), stayBadge = $('#rStayBadge');
     const stayCallout = $('#rStayCallout'), stayDetails = $('#rStayDetails');
     const auditStamp = $('#rAuditStamp'), checkedBy = $('#rCheckedBy'), checkedAt = $('#rCheckedAt');
 
     undo.hidden = true;
     editBtn.hidden = true;
+    if (manualAdmit) manualAdmit.hidden = true;
     mem.innerHTML = '';
     note.textContent = '';
     team.textContent = '';
@@ -392,6 +395,21 @@
       title.textContent = 'Admitted · Entry Confirmed';
       populateComprehensiveDetails();
       note.textContent = `Team verified by ${d.checkedInBy || 'Organiser'}.`;
+    } else if (d.status === 'view') {
+      cls = 'view';
+      title.textContent = d.checkedIn ? 'Team Record (Already Admitted)' : 'Team Record (Not Checked In)';
+      populateComprehensiveDetails();
+      note.textContent = d.checkedIn
+        ? `Admitted at ${timeOf(d.checkedInAt)} by ${d.checkedInBy || 'an organiser'}.`
+        : 'Viewing record details. Team has NOT been admitted yet (requires scanning pass).';
+      if (!d.checkedIn && manualAdmit) {
+        manualAdmit.hidden = false;
+        manualAdmit.onclick = () => {
+          if (confirm(`Check-in and admit "${d.team || 'this team'}" without scanning pass?`)) {
+            submit({ code: d.code });
+          }
+        };
+      }
     } else if (d.status === 'already') {
       cls = 'already';
       title.textContent = 'Already Checked In';
@@ -424,7 +442,7 @@
     }
 
     $('#rCard').hidden = !team.textContent;
-    $('#rIcon').innerHTML = ICONS[cls === 'bad' ? 'bad' : cls];
+    $('#rIcon').innerHTML = ICONS[cls] || ICONS.bad;
     el.className = `result ${cls}`;
     el.hidden = false;
     feel(cls);
@@ -733,7 +751,7 @@
             </div>
             <div class="row">
               <span style="font-size:12px; color:var(--soft);">Leader: 📞 ${esc(r.leaderPhone || '')} &bull; 🚨 Guardian: ${esc(r.emergencyPhone || '')}</span>
-              <button class="btn sm" data-code="${esc(r.code)}" type="button">${r.checkedIn ? 'View Record' : (currentRole === 'super_admin' ? 'Manage & Admit' : 'Inspect Record')}</button>
+              <button class="btn sm" data-code="${esc(r.code)}" type="button">${r.checkedIn ? 'View Record' : 'View / Edit Record'}</button>
             </div>
           </li>
         `;
@@ -745,7 +763,7 @@
     const b = e.target.closest('button[data-code]');
     if (b) {
       busy = true;
-      submit({ code: b.dataset.code });
+      submit({ code: b.dataset.code, viewOnly: true });
     }
   });
 

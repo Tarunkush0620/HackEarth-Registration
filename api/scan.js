@@ -31,6 +31,14 @@ module.exports = async (req, res) => {
     if (!reg) return json(res, 200, { status: 'notfound', code });
     if (reg.status !== 'paid') return json(res, 200, { status: 'unpaid', ...brief(reg) });
 
+    // If viewOnly / inspectOnly requested, do NOT check-in the team!
+    if (body.viewOnly || body.inspectOnly) {
+      return json(res, 200, {
+        status: reg.checked_in ? 'already' : 'view',
+        ...brief(reg),
+      });
+    }
+
     // Atomic: only one scan can flip checked_in from false to true
     const { data: claimed, error: e2 } = await db
       .from('registrations')
