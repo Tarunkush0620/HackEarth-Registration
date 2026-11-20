@@ -312,7 +312,7 @@
         stayBadge.hidden = false;
         stayCallout.hidden = false;
         const gCount = d.stayCount || (d.members ? d.members.length : 1);
-        stayDetails.textContent = `${gCount} Guest(s) Requested for ${d.team || 'Team'}. Includes Free Shuttle Service. (Payable later on arrival / ₹0 charged on portal)`;
+        stayDetails.textContent = `${gCount} Guest(s) Requested for ${d.team || 'Team'}. Includes Free Shuttle Service. (Accommodation charge: ₹1,500/guest for 2 to 3 days · ₹0 charged on portal)`;
       }
 
       // Leader details
