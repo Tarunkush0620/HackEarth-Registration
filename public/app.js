@@ -96,7 +96,7 @@
       stayCount = sel ? parseInt(sel.value, 10) || state.size : state.size;
       const subEl = $('#staySubtotal');
       if (subEl) {
-        subEl.textContent = `ℹ️ Accommodation requested for ${stayCount} member(s). Accommodation charge will be ₹1,500 per person (payable directly on arrival; no payment is charged on this portal right now). Stay details and check-in instructions will be sent to your team.`;
+        subEl.textContent = `ℹ️ Accommodation requested for ${stayCount} member(s) (for 2 to 3 days). Accommodation charge will be ₹1,500 per person (payable directly on arrival; no payment is charged on this portal right now). Stay details and check-in instructions will be sent to your team.`;
       }
     }
 
