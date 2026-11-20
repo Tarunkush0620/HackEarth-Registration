@@ -144,6 +144,15 @@ fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
 .stay-icon-title h3 { margin: 0; font: 600 15.5px 'Poppins', sans-serif; color: var(--indigo); }
 .stay-icon { font-size: 22px; }
 .stay-desc { margin: 0; font-size: 13px; line-height: 1.5; color: var(--indigo-soft); }
+.stay-highlight-box {
+  display: flex; align-items: center; gap: 11px;
+  background: #fdf3f8; border: 1.5px solid #f4a6d7;
+  border-radius: 12px; padding: 12px 16px; margin: 16px 0 6px;
+  font-size: 13.5px; line-height: 1.45; color: var(--indigo);
+}
+.stay-highlight-box strong { color: var(--magenta); font-weight: 700; }
+.stay-highlight-box u { text-decoration-color: var(--magenta); font-weight: 600; }
+.stay-highlight-icon { font-size: 18px; line-height: 1; flex-shrink: 0; }
 .stay-price-pill {
   display: inline-block; background: #f3ecfb; border: 1px solid #dcc8f5; color: var(--indigo); padding: 8px 14px; border-radius: 10px; margin-top: 10px; line-height: 1.4;
 }

@@ -96,7 +96,7 @@
       stayCount = sel ? parseInt(sel.value, 10) || state.size : state.size;
       const subEl = $('#staySubtotal');
       if (subEl) {
-        subEl.textContent = `ℹ️ Accommodation requested for ${stayCount} member(s). All details regarding accommodation will be notified to your registered email.`;
+        subEl.innerHTML = `ℹ️ Accommodation requested for <b>${stayCount} member(s)</b>. All details regarding accommodation will be notified to your registered email.<br><span style="display:inline-block; margin-top:5px; color:#b8337f; font-weight:700;">⚠️ Notice: Charges of accommodation will be apart from the registration fee.</span>`;
       }
     }
 
