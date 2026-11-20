@@ -76,7 +76,7 @@
     for (let n = 1; n <= state.size; n++) {
       const opt = document.createElement('option');
       opt.value = n;
-      opt.textContent = `${n} member${n > 1 ? 's' : ''} (₹${(n * 1500).toLocaleString('en-IN')})`;
+      opt.textContent = `${n} member${n > 1 ? 's' : ''}`;
       if (n === oldVal || (!oldVal && n === state.size)) opt.selected = true;
       sel.appendChild(opt);
     }
@@ -96,7 +96,7 @@
       stayCount = sel ? parseInt(sel.value, 10) || state.size : state.size;
       const subEl = $('#staySubtotal');
       if (subEl) {
-        subEl.textContent = `ℹ️ Accommodation requested for ${stayCount} member(s) (for 2 to 3 days). Accommodation charge will be ₹1,500 per person (no payment is charged on this portal right now). Stay details and check-in instructions will be sent to your team.`;
+        subEl.textContent = `ℹ️ Accommodation requested for ${stayCount} member(s). All details regarding accommodation will be notified to your registered email.`;
       }
     }
 
