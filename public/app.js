@@ -259,49 +259,9 @@
     return list.length > 0 ? list[0] : null;
   }
 
-  function renderTeamsDatalist() {
-    const list = $('#teamsList');
-    if (!list || !Array.isArray(state.cfg?.teams)) return;
-    list.innerHTML = '';
-    state.cfg.teams.forEach((t) => {
-      const opt = document.createElement('option');
-      opt.value = t.name;
-      opt.label = `Team #${t.id} · Panel ${t.panel} (${t.leader})`;
-      list.appendChild(opt);
-    });
-  }
+  function renderTeamsDatalist() {}
 
-  function updateTeamMatchBadge() {
-    const badge = $('#teamMatchBadge');
-    if (!badge) return;
-    const teamInput = $('#teamName');
-    const leaderInput = document.querySelector('[name=mname]');
-    const val = (teamInput?.value || '').trim();
-    const leaderVal = (leaderInput?.value || '').trim();
-
-    if (!val || val.length < 2) {
-      badge.hidden = true;
-      badge.innerHTML = '';
-      return;
-    }
-
-    const matched = findMatchingTeam(val, leaderVal);
-    if (matched) {
-      badge.hidden = false;
-      badge.className = 'team-badge matched';
-      badge.innerHTML = `✓ <b>Official Team #${matched.id}</b> · Panel ${matched.panel} · Leader: ${esc(matched.leader)}`;
-      if (leaderInput && !leaderInput.value) {
-        leaderInput.placeholder = matched.leader;
-      }
-    } else if (val.length >= 3) {
-      badge.hidden = false;
-      badge.className = 'team-badge unmatched';
-      badge.innerHTML = `⚠️ Unlisted team name — please verify spelling with shortlist`;
-    } else {
-      badge.hidden = true;
-      badge.innerHTML = '';
-    }
-  }
+  function updateTeamMatchBadge() {}
 
   /* ---------- Payment proof upload handler ---------- */
   let proofBase64 = '';
