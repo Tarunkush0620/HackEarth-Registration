@@ -76,10 +76,23 @@ create table if not exists shortlist (
   unstop_team_id  text
 );
 
--- 5. Row Level Security (RLS)
--- Lock both tables so only server-side service-role requests can read/write
+-- 5. Row Level Security (RLS) & Access Policies
 alter table registrations enable row level security;
 alter table shortlist     enable row level security;
+
+-- Allow full organizer desk read/write access so the scanner always displays all paid teams
+drop policy if exists "Allow full access on registrations" on registrations;
+create policy "Allow full access on registrations"
+  on registrations
+  for all
+  using (true)
+  with check (true);
+
+drop policy if exists "Allow read on shortlist" on shortlist;
+create policy "Allow read on shortlist"
+  on shortlist
+  for select
+  using (true);
 
 -- 6. Supabase Storage: 'payment-proofs' Bucket Setup
 -- Create the public storage bucket for payment screenshots if not already present
