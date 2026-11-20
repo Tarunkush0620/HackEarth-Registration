@@ -53,7 +53,7 @@ function isConfigured() {
   );
 }
 
-const mockMode = process.env.MOCK_PAYMENT === 'true' || (process.env.MOCK_PAYMENT !== 'false' && !isConfigured());
+const mockMode = process.env.MOCK_PAYMENT === 'true';
 
 // In-memory store for local testing when credentials are not yet configured
 const mockStore = new Map();
