@@ -27,12 +27,6 @@ module.exports = async (req, res) => {
     const allFemale = list.filter((r) => r.is_all_female).length;
     const stayTeams = list.filter((r) => r.need_stay).length;
 
-    const sbUrl = (process.env.SUPABASE_URL || 'https://vdeduahdpowgghovxbim.supabase.co').trim();
-    const sbKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || '').trim();
-
-    let host = 'none';
-    try { host = new URL(sbUrl).host; } catch {}
-
     return json(res, 200, {
       paid,
       checkedIn,
@@ -40,12 +34,6 @@ module.exports = async (req, res) => {
       allFemale,
       stayTeams,
       currentOrganiser: auth.name,
-      _debug: auth.role === 'super_admin' ? {
-        rawCount: data?.length,
-        sbHost: host,
-        keyPrefix: sbKey.slice(0, 10),
-        keyLen: sbKey.length,
-      } : undefined,
     });
   } catch (err) {
     console.error('stats failed', err);
