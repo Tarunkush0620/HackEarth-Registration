@@ -116,7 +116,7 @@
         const pct = data.paid ? Math.round(100 * data.checkedIn / data.paid) : 0;
         $('#meterFill').style.width = pct + '%';
         if ($('#meterPct')) $('#meterPct').textContent = pct + '%';
-        if ($('#badgeStay')) $('#badgeStay').textContent = `🏨 ${data.stayTeams || 0} Stay Booked`;
+        if ($('#badgeStay')) $('#badgeStay').textContent = `🏨 ${data.stayTeams || 0} Stay Requested`;
         if ($('#badgeWomen')) $('#badgeWomen').textContent = `★ ${data.allFemale || 0} All-Women`;
       }
     } catch {}
@@ -312,7 +312,7 @@
         stayBadge.hidden = false;
         stayCallout.hidden = false;
         const gCount = d.stayCount || (d.members ? d.members.length : 1);
-        stayDetails.textContent = `${gCount} Guest(s) Confirmed for ${d.team || 'Team'}. Includes Free University Shuttle Service. (₹${(gCount * 1500).toLocaleString('en-IN')} Paid)`;
+        stayDetails.textContent = `${gCount} Guest(s) Requested for ${d.team || 'Team'}. Includes Free Shuttle Service. (Payable later on arrival / ₹0 charged on portal)`;
       }
 
       // Leader details
@@ -728,7 +728,7 @@
             <div class="sub-row">
               <span class="chip ${r.checkedIn ? 'in' : ''}">${r.checkedIn ? `✓ Admitted by ${esc(r.checkedInBy || 'Organiser')} (${esc(timeOf(r.checkedInAt))})` : 'Not checked in'}</span>
               ${r.checkedIn ? `<span class="chip ${r.presentCount === r.totalMembers ? 'in' : 'stay'}">👥 ${r.presentCount !== undefined ? r.presentCount : r.totalMembers}/${r.totalMembers} Present</span>` : ''}
-              ${r.needStay ? `<span class="chip stay">🏨 Stay (${r.stayCount || r.members.length} Guests)</span>` : ''}
+              ${r.needStay ? `<span class="chip stay">🏨 Stay Requested (${r.stayCount || r.members.length} Guests)</span>` : ''}
               ${r.isAllFemale ? `<span class="chip women">★ All-Women</span>` : ''}
             </div>
             <div class="row">

@@ -12,6 +12,7 @@ module.exports = (req, res) => {
     fee: cfg.FEE_INR,
     allFemaleFee: cfg.ALL_FEMALE_FEE_INR,
     accommodationFeePerPerson: cfg.ACCOMMODATION_FEE_PER_PERSON_INR,
+    estimatedStayRate: cfg.ESTIMATED_STAY_RATE_INR || 1500,
     minMembers: cfg.MIN_MEMBERS,
     maxMembers: cfg.MAX_MEMBERS,
     tracks: cfg.TRACKS,

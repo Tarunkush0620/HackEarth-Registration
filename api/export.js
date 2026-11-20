@@ -30,7 +30,7 @@ module.exports = async (req, res) => {
       'Payment Status',
       'Total Paid (INR)',
       'All-Women Team',
-      'Stay Confirmed',
+      'Stay Requested',
       'Stay Guests Count',
       'Venue Checked In',
       'Admitted By Organiser',

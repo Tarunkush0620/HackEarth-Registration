@@ -72,12 +72,11 @@
     const sel = $('#stayCount');
     if (!sel) return;
     const oldVal = parseInt(sel.value, 10);
-    const rate = state.cfg?.accommodationFeePerPerson || 1500;
     sel.innerHTML = '';
     for (let n = 1; n <= state.size; n++) {
       const opt = document.createElement('option');
       opt.value = n;
-      opt.textContent = `${n} member${n > 1 ? 's' : ''} (₹${(n * rate).toLocaleString('en-IN')})`;
+      opt.textContent = `${n} member${n > 1 ? 's' : ''} (Payable on arrival)`;
       if (n === oldVal || (!oldVal && n === state.size)) opt.selected = true;
       sel.appendChild(opt);
     }
@@ -86,25 +85,23 @@
   function updatePricing() {
     const allFemale = isTeamAllFemale();
     const regFee = allFemale ? (state.cfg?.allFemaleFee || 200) : (state.cfg?.fee || 400);
-    const stayRate = state.cfg?.accommodationFeePerPerson || 1500;
 
     const needStay = ($('input[name=needStay]:checked') || {}).value === 'yes';
     const stayWrapper = $('#stayCountWrapper');
     if (stayWrapper) stayWrapper.hidden = !needStay;
 
     let stayCount = 0;
-    let stayFee = 0;
     if (needStay) {
       const sel = $('#stayCount');
       stayCount = sel ? parseInt(sel.value, 10) || state.size : state.size;
-      stayFee = stayCount * stayRate;
       const subEl = $('#staySubtotal');
       if (subEl) {
-        subEl.textContent = `Accommodation & Shuttle: ${stayCount} member(s) × ₹${stayRate.toLocaleString('en-IN')} = ₹${stayFee.toLocaleString('en-IN')}`;
+        subEl.textContent = `ℹ️ Accommodation Request: ${stayCount} member(s). No stay fee is charged right now on this portal. Venue stay charges (approx. ₹1,500/person) are payable later directly upon check-in.`;
       }
     }
 
-    const totalFee = regFee + stayFee;
+    // Accommodation fee is NOT collected on this portal right now — only the team registration fee!
+    const totalFee = regFee;
 
     const banner = $('#discountBanner');
     if (banner) banner.hidden = !allFemale;
@@ -113,7 +110,7 @@
     const btn = $('#pay');
     if (btn && !btn.disabled) {
       let label = `Complete Registration (₹${totalFee.toLocaleString('en-IN')}) & Get RSVP Pass`;
-      if (allFemale && !needStay) {
+      if (allFemale) {
         label = `Complete Registration (₹200 · All-Women Discount) & Get RSVP Pass`;
       }
       btn.textContent = label;
@@ -704,7 +701,7 @@
     if ($('#f-venue')) $('#f-venue').textContent = cfg.venue;
     if ($('#f-fee')) $('#f-fee').innerHTML = `₹${cfg.fee} <span class="wie-tag">(₹${cfg.allFemaleFee || 200} for all-female)</span>`;
     document.querySelectorAll('.fee-inline').forEach((n) => (n.textContent = cfg.fee));
-    document.querySelectorAll('.stay-rate-inline').forEach((n) => (n.textContent = (cfg.accommodationFeePerPerson || 1500).toLocaleString('en-IN')));
+    document.querySelectorAll('.stay-rate-inline').forEach((n) => (n.textContent = (cfg.estimatedStayRate || 1500).toLocaleString('en-IN')));
     renderSize();
     renderMembers();
     renderTracks();
