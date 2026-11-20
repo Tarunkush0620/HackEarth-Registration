@@ -76,7 +76,7 @@
     for (let n = 1; n <= state.size; n++) {
       const opt = document.createElement('option');
       opt.value = n;
-      opt.textContent = `${n} member${n > 1 ? 's' : ''}`;
+      opt.textContent = `${n} member${n > 1 ? 's' : ''} (₹${(n * 1500).toLocaleString('en-IN')} payable on arrival)`;
       if (n === oldVal || (!oldVal && n === state.size)) opt.selected = true;
       sel.appendChild(opt);
     }
@@ -96,7 +96,7 @@
       stayCount = sel ? parseInt(sel.value, 10) || state.size : state.size;
       const subEl = $('#staySubtotal');
       if (subEl) {
-        subEl.textContent = `ℹ️ Accommodation requested for ${stayCount} member(s). No payment is charged right now on this portal; stay details and check-in instructions will be sent to your team.`;
+        subEl.textContent = `ℹ️ Accommodation requested for ${stayCount} member(s). Accommodation charge will be ₹1,500 per person (payable directly on arrival; no payment is charged on this portal right now). Stay details and check-in instructions will be sent to your team.`;
       }
     }
 
