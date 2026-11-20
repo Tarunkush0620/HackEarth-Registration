@@ -76,7 +76,7 @@
     for (let n = 1; n <= state.size; n++) {
       const opt = document.createElement('option');
       opt.value = n;
-      opt.textContent = `${n} member${n > 1 ? 's' : ''} (Payable on arrival)`;
+      opt.textContent = `${n} member${n > 1 ? 's' : ''} (Payable at venue on check-in)`;
       if (n === oldVal || (!oldVal && n === state.size)) opt.selected = true;
       sel.appendChild(opt);
     }
@@ -96,7 +96,7 @@
       stayCount = sel ? parseInt(sel.value, 10) || state.size : state.size;
       const subEl = $('#staySubtotal');
       if (subEl) {
-        subEl.textContent = `ℹ️ Accommodation Request: ${stayCount} member(s). No stay fee is charged right now on this portal. Venue stay charges (approx. ₹1,500/person) are payable later directly upon check-in.`;
+        subEl.textContent = `ℹ️ Assistance Preference Recorded: Lodging requested for ${stayCount} member(s). No payment is charged on this portal. Partner check-in instructions and room allocations will be communicated directly. Estimated tariff (~₹1,500/guest) is payable on arrival.`;
       }
     }
 
